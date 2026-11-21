@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#252819">
+  <meta name="description" content="Conheça o Atisq, um jogo de ação multiplayer em pixel art.">
+  <title>Atisq — Jogo de ação multiplayer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="world" aria-hidden="true">
+    <div class="hills"></div>
+    <img class="cloud cloud-left" src="assets/nuvem.png" alt="">
+    <img class="cloud cloud-right" src="assets/nuvem.png" alt="">
+    <img class="tree tree-left" src="assets/arvore-esquerda.png" alt="">
+    <img class="tree tree-right" src="assets/arvore-direita.png" alt="">
+    <div class="ground"></div>
+  </div>
+
+  <div class="site" id="inicio">
+    <header class="masthead">
+      <a class="brand" href="#inicio" aria-label="Atisq, início">Atisq</a>
+      <nav aria-label="Navegação principal">
+        <a href="#sobre">O jogo</a>
+        <a href="#personagens">Personagens</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="stage" aria-labelledby="title">
+        <div class="scene" aria-hidden="true">
+          <img class="scene-cloud" src="assets/nuvem.png" alt="">
+          <img class="scene-tree" src="assets/arvore-direita.png" alt="">
+          <img class="scene-house" src="assets/casa.png" alt="">
+          <div class="scene-floor"></div>
+          <div class="ledge ledge-left"><img src="assets/iris.png" alt=""></div>
+          <div class="ledge ledge-right"><img src="assets/fole.png" alt=""></div>
+        </div>
+        <div class="stage-copy">
+          <p class="genre">Ação multiplayer em pixel art</p>
+          <h1 id="title">ATISQ</h1>
+          <a class="button" href="#sobre">Conheça o jogo</a>
+        </div>
+      </section>
+
+      <div class="below">
+        <section class="panel" id="sobre" aria-labelledby="about-title">
+          <h2 id="about-title">O jogo</h2>
+          <p>Em Atisq, você escolhe seu personagem e enfrenta outros jogadores em arenas de plataforma. Combine saltos e habilidades para acertar seus ataques enquanto se esquiva dos adversários.</p>
+        </section>
+        <section class="panel" id="personagens" aria-labelledby="characters-title">
+          <h2 id="characters-title">Personagens</h2>
+          <ul class="characters">
+            <li><img src="assets/iris.png" alt="" loading="lazy"><span>Iris</span></li>
+            <li><img src="assets/fole.png" alt="" loading="lazy"><span>Fole</span></li>
+          </ul>
+        </section>
+      </div>
+    </main>
+    <footer>Atisq</footer>
+  </div>
+</body>
+</html>

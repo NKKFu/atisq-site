@@ -1,0 +1,252 @@
+:root {
+  color-scheme: dark;
+  --soil: #201916;
+  --wood: #30241c;
+  --stone: #81725c;
+  --gold: #ffcb64;
+  --cream: #fff0ca;
+  --cream-muted: #dec9a5;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--cream);
+  background: var(--soil);
+  font: 1rem/1.6 Verdana, Geneva, sans-serif;
+}
+
+a { color: inherit; }
+
+a:focus-visible {
+  outline: 3px solid #ffe496;
+  outline-offset: 4px;
+}
+
+img { image-rendering: pixelated; }
+
+.world {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 550px;
+  pointer-events: none;
+  overflow: hidden;
+  background: linear-gradient(#4f9cc6, #aad9dd 61%, #3e2a20 62%, var(--soil) 96%);
+}
+
+.hills {
+  position: absolute;
+  inset: 85px 0 auto;
+  height: 265px;
+  background: url("assets/montanhas.png") center bottom / auto 225px repeat-x;
+  image-rendering: pixelated;
+  opacity: .65;
+}
+
+.cloud, .tree { position: absolute; }
+.cloud { width: 200px; }
+.cloud-left { left: 5%; top: 48px; }
+.cloud-right { right: 4%; top: 86px; }
+.tree-left { width: clamp(100px, 18vw, 260px); bottom: 204px; left: -10px; }
+.tree-right { width: clamp(140px, 20vw, 300px); bottom: 205px; right: -34px; }
+
+.ground {
+  position: absolute;
+  inset: 61% 0 auto;
+  height: 59px;
+  background: url("assets/plataforma.png") left top / auto 40px repeat-x;
+  image-rendering: pixelated;
+}
+
+.site {
+  position: relative;
+  width: min(960px, calc(100% - 32px));
+  margin: 0 auto;
+  padding-top: clamp(26px, 5vw, 66px);
+}
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px;
+  background: var(--wood);
+  border: 3px solid #6e5231;
+  border-bottom: 0;
+  box-shadow: 0 -3px #aa8655;
+}
+
+.brand {
+  color: var(--gold);
+  font: bold 1.8rem Georgia, serif;
+  text-decoration: none;
+}
+
+nav { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+
+nav a {
+  color: var(--cream);
+  font-size: .875rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+nav a:hover { text-decoration: underline; }
+
+.stage {
+  position: relative;
+  isolation: isolate;
+  border: 8px ridge var(--stone);
+  min-height: 472px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #79bbd1;
+  box-shadow: 0 8px 0 #1a1512;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: -1;
+  background: url("assets/montanhas.png") center bottom / auto 72% repeat-x, linear-gradient(#62adc9, #b6dadd);
+  image-rendering: pixelated;
+}
+
+.scene-cloud, .scene-tree, .scene-house { position: absolute; }
+.scene-cloud { width: 135px; top: 11%; left: 12%; }
+.scene-tree { width: 183px; right: -15px; bottom: 40px; }
+.scene-house { width: 147px; left: -24px; bottom: 42px; }
+
+.scene-floor {
+  position: absolute;
+  inset: auto 0 0;
+  height: 45px;
+  background: url("assets/plataforma.png") left top / auto 45px repeat-x;
+}
+
+.ledge {
+  position: absolute;
+  width: 160px;
+  height: 36px;
+  background: url("assets/plataforma.png") center / 100% 100% no-repeat;
+}
+
+.ledge-left { left: 13%; bottom: 84px; }
+.ledge-right { right: 11%; bottom: 111px; }
+.ledge img { position: absolute; right: 24px; bottom: 31px; height: 85px; }
+.ledge-right img { right: 51px; height: 73px; }
+
+.stage-copy {
+  text-align: center;
+  width: 100%;
+  margin: -24px 0 0;
+  padding: 18px 10px 24px;
+  background: radial-gradient(ellipse, #172a25e6 6%, #172a25aa 42%, transparent 73%);
+}
+
+.genre {
+  margin: 0 0 4px;
+  color: #fff4d9;
+  font: bold .875rem/1.4 Verdana, sans-serif;
+  text-shadow: 0 2px #14241c, 1px 0 #14241c;
+}
+
+h1 {
+  margin: 0 0 18px;
+  color: var(--gold);
+  font: 900 clamp(3.8rem, 11vw, 7.5rem)/.93 Georgia, serif;
+  letter-spacing: -.06em;
+  text-shadow: 2px 3px #6f3c1f, 4px 6px #241a12, -2px -1px #4f3520;
+}
+
+.button {
+  display: inline-block;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 3px solid #643a21;
+  background: #ffcf77;
+  color: #2c1c16;
+  box-shadow: inset 0 2px #ffedab, 0 4px #2c1c16;
+  font-size: .875rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.button:hover { background: #ffe19a; }
+
+.below {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 14px;
+  margin-top: 23px;
+}
+
+.panel {
+  min-width: 0;
+  padding: 17px 20px 20px;
+  border: 3px solid #6e5231;
+  border-left-color: #9a784c;
+  background: #31251e;
+}
+
+.panel h2 {
+  margin: 0 0 8px;
+  color: var(--gold);
+  font: bold 1.65rem Georgia, serif;
+}
+
+.panel p { margin: 0; color: var(--cream-muted); }
+
+.characters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 3px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.characters li {
+  flex: 1 0 70px;
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  padding: 8px 6px 4px;
+  border: 1px solid #6c5139;
+  background: #211a16;
+  font-size: .875rem;
+}
+
+.characters img { width: 40px; height: 50px; object-fit: contain; }
+
+footer {
+  padding: 20px 0 24px;
+  font-size: .875rem;
+  color: var(--cream-muted);
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .stage { min-height: 410px; }
+  .stage-copy { margin-top: -76px; }
+  .below { grid-template-columns: 1fr; }
+  .scene-house { width: 100px; bottom: 31px; }
+  .scene-tree { width: 120px; bottom: 32px; }
+  .scene-floor { height: 33px; background-size: auto 33px; }
+  .ledge { width: 100px; height: 26px; }
+  .ledge-left { left: 8%; bottom: 65px; }
+  .ledge-right { right: 8%; bottom: 76px; }
+  .ledge img { right: 16px; bottom: 23px; height: 58px; }
+  .ledge-right img { right: 29px; height: 51px; }
+}
+
+@media (max-width: 385px) {
+  .site { width: calc(100% - 20px); }
+  .masthead { padding-inline: 10px; }
+  nav { gap: 8px 12px; }
+}
