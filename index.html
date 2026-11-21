@@ -96,9 +96,15 @@
               <img class="hero-logo" src="assets/logo.png" alt="Atisq">
               <p class="hero-tagline">Ação multiplayer 2D em arenas de plataforma</p>
               <div class="hero-actions">
-                <a class="btn btn-primary" href="https://discord.gg/d4humsHYCa" target="_blank" rel="noopener noreferrer">Entrar no Discord</a>
-                <a class="btn btn-secondary" href="#novidades">Novidades</a>
+                <button type="button" class="btn btn-primary" id="play-now-btn">Jogar Agora</button>
+                <a class="btn btn-secondary" href="https://discord.gg/d4humsHYCa" target="_blank" rel="noopener noreferrer">Entrar no Discord</a>
               </div>
+            </div>
+
+            <!-- Live Unity WebGL Embed inside the stone frame -->
+            <div class="game-embed" id="game-embed" hidden>
+              <iframe id="game-iframe" title="Atisq — Jogar no Navegador" allow="autoplay; fullscreen; gamepad" allowfullscreen></iframe>
+              <button type="button" class="game-close-btn" id="close-game-btn" title="Fechar jogo">✕ Fechar</button>
             </div>
           </section>
 
@@ -201,6 +207,7 @@
               <h2 class="side-heading">Menu</h2>
               <ul>
                 <li><a href="#inicio">Início</a></li>
+                <li><a href="play/" id="side-play-link">Jogar Agora</a></li>
                 <li><a href="#novidades">Novidades</a></li>
                 <li><a href="#arenas">Arenas</a></li>
                 <li><a href="#sobre">Sobre o Jogo</a></li>

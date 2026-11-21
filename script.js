@@ -1,4 +1,32 @@
 /* =========================================================
+   EMBEDDED UNITY WEBGL GAME LAUNCHER
+   ========================================================= */
+const playNowBtn = document.getElementById("play-now-btn");
+const sidePlayLink = document.getElementById("side-play-link");
+const gameEmbed = document.getElementById("game-embed");
+const gameIframe = document.getElementById("game-iframe");
+const closeGameBtn = document.getElementById("close-game-btn");
+
+function openWebGLGame(e) {
+  if (e) e.preventDefault();
+  if (!gameEmbed || !gameIframe) return;
+  gameIframe.src = "play/index.html";
+  gameEmbed.hidden = false;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  setTimeout(() => gameIframe.focus(), 120);
+}
+
+function closeWebGLGame() {
+  if (!gameEmbed || !gameIframe) return;
+  gameEmbed.hidden = true;
+  gameIframe.src = "about:blank";
+}
+
+if (playNowBtn) playNowBtn.addEventListener("click", openWebGLGame);
+if (sidePlayLink) sidePlayLink.addEventListener("click", openWebGLGame);
+if (closeGameBtn) closeGameBtn.addEventListener("click", closeWebGLGame);
+
+/* =========================================================
    DYNAMIC PROCEDURAL CLOUDS (WORLD SKY + STAGE SKY)
    ========================================================= */
 const CLOUD_SPRITES = [
