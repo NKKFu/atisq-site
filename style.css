@@ -17,7 +17,7 @@
   --gold-deep: #7a4319;
   --moss: #729c3f;
   --moss-dark: #2f431b;
-  --horizon-y: 430px;
+  --horizon-y: 538px;
 }
 
 * {
@@ -34,7 +34,7 @@ body {
   min-height: 100vh;
   background: var(--soil-deep);
   color: var(--text);
-  font: 14px/1.6 Verdana, Geneva, Tahoma, sans-serif;
+  font: 17px/1.6 Verdana, Geneva, Tahoma, sans-serif;
   overflow-x: hidden;
 }
 
@@ -73,7 +73,7 @@ button:focus-visible {
 .world {
   position: absolute;
   inset: 0 0 auto 0;
-  height: 980px;
+  height: 1120px;
   pointer-events: none;
   overflow: hidden;
 }
@@ -188,9 +188,9 @@ button:focus-visible {
    ========================================================= */
 .portal-wrap {
   position: relative;
-  width: min(1040px, calc(100% - 28px));
+  width: min(1300px, calc(100% - 28px));
   margin: 0 auto;
-  padding: 28px 0 42px;
+  padding: 34px 0 52px;
 }
 
 /* Left & right grass-line scenery anchored right behind the spiky grass blades */
@@ -349,20 +349,31 @@ button:focus-visible {
    STONE-FRAMED MAIN COLUMN
    ========================================================= */
 .stone-frame {
-  padding: 0;
-  border: 24px solid #2b351e;
-  border-image-source: url("assets/stone-frame-border.png");
-  border-image-slice: 16;
-  border-image-repeat: round;
-  background-color: var(--panel-bg);
+  padding: 16px;
+  border: 0;
+  background-color: #2b351e;
+  background-image:
+    url("assets/stone-tile.png"),
+    url("assets/stone-tile.png"),
+    url("assets/stone-tile.png"),
+    url("assets/stone-tile.png");
+  background-position: left top, left bottom, left top, right top;
+  background-size: 16px 16px;
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
   image-rendering: pixelated;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.65);
+}
+
+.stone-divider {
+  height: 16px;
+  background: #141a12 url("assets/rock-divider.png") left top / 32px 16px repeat-x;
+  image-rendering: pixelated;
 }
 
 /* Main Hero Stage inside Stone Frame (Atisq Lobby depth + blur) */
 .stage {
   position: relative;
-  min-height: 500px;
+  height: 624px;
   overflow: hidden;
   border: 2px solid #0e130c;
   background: linear-gradient(180deg, #55f5ff 0%, #7cf7ff 55%, #b8fbff 100%);
@@ -533,15 +544,15 @@ button:focus-visible {
 }
 
 .hero-logo {
-  width: clamp(200px, 34vw, 276px);
+  width: clamp(250px, 42vw, 345px);
   height: auto;
   filter: drop-shadow(0 6px 0 rgba(16, 12, 10, 0.55));
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .hero-tagline {
-  margin: 0 0 18px;
-  font-size: 14px;
+  margin: 0 0 22px;
+  font-size: 17.5px;
   font-weight: bold;
   color: #fff6dc;
   text-shadow: 0 2px 0 #131c15, 1px 0 0 #131c15, -1px 0 0 #131c15;
@@ -551,16 +562,16 @@ button:focus-visible {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 38px;
-  padding: 8px 18px;
-  font: bold 13px/1 Verdana, Geneva, Tahoma, sans-serif;
+  min-height: 46px;
+  padding: 10px 22px;
+  font: bold 16px/1 Verdana, Geneva, Tahoma, sans-serif;
   text-decoration: none;
   border: 2px solid #23160d;
   cursor: pointer;
@@ -675,33 +686,32 @@ button:focus-visible {
 .feed {
   background: var(--panel-bg);
   border: 2px solid #120f0d;
-  border-top: 0;
-  padding: 8px 22px 26px;
+  padding: 10px 28px 32px;
 }
 
 .post {
-  padding: 20px 0 22px;
+  padding: 25px 0 28px;
   border-bottom: 1px solid #2e2620;
 }
 
 .post:last-child {
   border-bottom: 0;
-  padding-bottom: 6px;
+  padding-bottom: 8px;
 }
 
 .post-head {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding-bottom: 12px;
+  gap: 18px;
+  padding-bottom: 15px;
   border-bottom: 1px solid #2f2822;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .post-avatar {
-  flex: 0 0 64px;
-  width: 64px;
-  height: 64px;
+  flex: 0 0 80px;
+  width: 80px;
+  height: 80px;
   background: #120f0d;
   border: 2px solid #594b3d;
   box-shadow: inset 0 0 0 2px #261f1a;
@@ -718,13 +728,13 @@ button:focus-visible {
 
 .post-avatar-sprite img {
   width: auto;
-  height: 52px;
+  height: 65px;
   object-fit: contain;
 }
 
 .post-meta h2 {
-  margin: 0 0 4px;
-  font-size: 18px;
+  margin: 0 0 5px;
+  font-size: 22px;
   line-height: 1.25;
   color: #9ba7ff;
   font-weight: bold;
@@ -732,7 +742,7 @@ button:focus-visible {
 
 .post-byline {
   margin: 0;
-  font-size: 12px;
+  font-size: 14.5px;
   color: var(--text-muted);
 }
 
@@ -742,7 +752,7 @@ button:focus-visible {
 }
 
 .post-body p {
-  margin: 0 0 11px;
+  margin: 0 0 14px;
   color: #d6cab8;
 }
 
@@ -903,8 +913,8 @@ button:focus-visible {
 .arena-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 12px;
+  gap: 15px;
+  margin-top: 15px;
 }
 
 .arena-card {
@@ -916,24 +926,24 @@ button:focus-visible {
 
 .arena-card img {
   width: 100%;
-  height: 112px;
+  height: 140px;
   object-fit: cover;
   border-bottom: 2px solid #2b231d;
 }
 
 .arena-card figcaption {
-  padding: 8px 10px 10px;
+  padding: 10px 12px 12px;
   display: grid;
-  gap: 2px;
+  gap: 3px;
 }
 
 .arena-card strong {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--gold);
 }
 
 .arena-card span {
-  font-size: 11.5px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
@@ -946,25 +956,31 @@ button:focus-visible {
 
 .pillar {
   position: relative;
-  padding: 0;
-  border: 24px solid #2b351e;
-  border-image-source: url("assets/stone-frame-border.png");
-  border-image-slice: 16;
-  border-image-repeat: round;
-  background-color: var(--panel-bg);
+  padding: 16px;
+  border: 0;
+  background-color: #2b351e;
+  background-image:
+    url("assets/stone-tile.png"),
+    url("assets/stone-tile.png"),
+    url("assets/stone-tile.png"),
+    url("assets/stone-tile.png");
+  background-position: left top, left bottom, left top, right top;
+  background-size: 16px 16px;
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
   image-rendering: pixelated;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.65);
 }
 
 .pillar-body {
+  min-height: 256px;
   padding: 18px 14px 22px;
   border: 2px solid #0e130c;
   background: var(--panel-bg);
 }
 
 .side-heading {
-  margin: 22px 0 10px;
-  font-size: 13.5px;
+  margin: 20px 0 10px;
+  font-size: 15px;
   text-align: center;
   color: #e4d5be;
   letter-spacing: 0.03em;
@@ -988,7 +1004,7 @@ button:focus-visible {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12.5px;
+  font-size: 14px;
 }
 
 .side-nav li::before {
@@ -1019,11 +1035,110 @@ button:focus-visible {
   background: radial-gradient(circle at 35% 35%, #b5e66c, #5c8a29 72%, #263b11 100%);
 }
 
+/* Controls Modal */
+.controls-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(8, 12, 9, 0.72);
+  backdrop-filter: blur(2px);
+}
+
+.controls-modal[hidden] {
+  display: none;
+}
+
+.controls-modal-card {
+  width: min(460px, 100%);
+  background: var(--panel-bg);
+  border: 2px solid var(--panel-border);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.75);
+  padding: 18px 22px 22px;
+}
+
+.controls-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.controls-modal-head h2 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--gold);
+}
+
+.controls-modal-close {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  background: var(--panel-elev);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.controls-modal-close:hover {
+  background: #2b3724;
+  color: #fff;
+}
+
+.controls-list {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  font-size: 14.5px;
+}
+
+.controls-list div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.controls-list div:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.controls-list dt {
+  color: var(--text);
+  font-weight: bold;
+}
+
+.controls-list dd {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.controls-list kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  font: bold 13px/1.3 Verdana, Geneva, Tahoma, sans-serif;
+  color: #fff6dc;
+  background: #232c1e;
+  border: 1px solid #596c4a;
+  box-shadow: 0 1px 0 #0d120b;
+}
+
 /* Footer */
 .site-footer {
-  padding: 18px 8px 18px;
+  padding: 22px 10px 22px;
   text-align: center;
-  font-size: 12px;
+  font-size: 14.5px;
   color: #c9a799;
   text-shadow: 0 1px 0 #120606;
 }
@@ -1193,13 +1308,13 @@ button:focus-visible {
 /* =========================================================
    RESPONSIVE
    ========================================================= */
-@media (max-width: 1240px) {
+@media (max-width: 1500px) {
   .flank {
     display: none;
   }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 960px) {
   .portal-grid {
     grid-template-columns: 1fr;
   }
@@ -1225,11 +1340,17 @@ button:focus-visible {
 @media (max-width: 600px) {
   .stone-frame,
   .pillar {
-    border-width: 16px;
+    padding: 12px;
+    background-size: 12px 12px;
+  }
+
+  .stone-divider {
+    height: 12px;
+    background-size: 24px 12px;
   }
 
   .stage {
-    min-height: 410px;
+    height: 408px;
   }
 
   .stage-ledge,

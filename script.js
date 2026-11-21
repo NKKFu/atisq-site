@@ -19,6 +19,37 @@ if (playNowBtn) playNowBtn.addEventListener("click", openWebGLGame);
 if (sidePlayLink) sidePlayLink.addEventListener("click", openWebGLGame);
 
 /* =========================================================
+   CONTROLS MODAL (SIDEBAR MENU -> CONTROLES)
+   ========================================================= */
+const sideControlsLink = document.getElementById("side-controls-link");
+const controlsModal = document.getElementById("controls-modal");
+const controlsModalClose = document.getElementById("controls-modal-close");
+
+function openControlsModal(e) {
+  if (e) e.preventDefault();
+  if (!controlsModal) return;
+  controlsModal.hidden = false;
+  if (controlsModalClose) controlsModalClose.focus();
+}
+
+function closeControlsModal() {
+  if (!controlsModal || controlsModal.hidden) return;
+  controlsModal.hidden = true;
+  if (gameIframe) gameIframe.focus();
+}
+
+if (sideControlsLink) sideControlsLink.addEventListener("click", openControlsModal);
+if (controlsModalClose) controlsModalClose.addEventListener("click", closeControlsModal);
+if (controlsModal) {
+  controlsModal.addEventListener("click", e => {
+    if (e.target === controlsModal) closeControlsModal();
+  });
+}
+window.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeControlsModal();
+});
+
+/* =========================================================
    DYNAMIC PROCEDURAL CLOUDS (WORLD SKY + STAGE SKY)
    ========================================================= */
 const CLOUD_SPRITES = [

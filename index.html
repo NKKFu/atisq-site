@@ -107,6 +107,8 @@
             </div>
           </section>
 
+          <div class="stone-divider" aria-hidden="true"></div>
+
           <!-- Underground Devlog & Info Feed -->
           <div class="feed">
             <!-- Post 1: Latest Update -->
@@ -205,24 +207,14 @@
             <nav class="side-nav" aria-label="Menu principal">
               <h2 class="side-heading">Menu</h2>
               <ul>
-                <li><a href="#inicio">Início</a></li>
-                <li><a href="play/" id="side-play-link">Jogar Agora</a></li>
+                <li><a href="#controles" id="side-controls-link">Controles</a></li>
                 <li><a href="#novidades">Novidades</a></li>
-                <li><a href="#arenas">Arenas</a></li>
                 <li><a href="#sobre">Sobre o Jogo</a></li>
               </ul>
 
               <h2 class="side-heading">Comunidade</h2>
               <ul>
                 <li><a href="https://discord.gg/d4humsHYCa" target="_blank" rel="noopener noreferrer">Discord Oficial</a></li>
-              </ul>
-
-              <h2 class="side-heading">Destaques</h2>
-              <ul class="side-stats">
-                <li>19 Personagens</li>
-                <li>Multiplayer Online</li>
-                <li>Pixel Art 2D</li>
-                <li>Arenas Variadas</li>
               </ul>
             </nav>
           </div>
@@ -244,6 +236,24 @@
       <img class="hell-rock rock-4" src="assets/hell-rock.png" alt="">
     </div>
     <div class="hell-floor"></div>
+  </div>
+
+  <!-- Controls Modal (opened from Sidebar -> Controles) -->
+  <div class="controls-modal" id="controls-modal" role="dialog" aria-modal="true" aria-labelledby="controls-modal-title" hidden>
+    <div class="controls-modal-card">
+      <div class="controls-modal-head">
+        <h2 id="controls-modal-title">Controles</h2>
+        <button type="button" class="controls-modal-close" id="controls-modal-close" aria-label="Fechar">✕</button>
+      </div>
+      <dl class="controls-list">
+        <div><dt><kbd>A</kbd> <kbd>D</kbd> ou <kbd>←</kbd> <kbd>→</kbd></dt><dd>Mover</dd></div>
+        <div><dt><kbd>W</kbd>, <kbd>Espaço</kbd> ou <kbd>↑</kbd></dt><dd>Toque para pular, segure para voar</dd></div>
+        <div><dt>Clique esquerdo</dt><dd>Atirar</dd></div>
+        <div><dt>Clique direito, <kbd>F</kbd> ou <kbd>J</kbd></dt><dd>Ataque corpo a corpo</dd></div>
+        <div><dt><kbd>Shift</kbd> ou <kbd>C</kbd></dt><dd>Recarregar</dd></div>
+        <div><dt><kbd>E</kbd> ou <kbd>R</kbd></dt><dd>Especial (varia por personagem)</dd></div>
+      </dl>
+    </div>
   </div>
 
   <script src="script.js"></script>

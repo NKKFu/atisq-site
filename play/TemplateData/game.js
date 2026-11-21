@@ -76,12 +76,11 @@ function startAtisq(loaderUrl, config) {
   const container = document.getElementById("unity-container");
   const overlay = document.getElementById("unity-loading-overlay");
   const progress = document.getElementById("unity-progress");
-  const status = document.getElementById("unity-loading-status");
+  const progressFill = document.getElementById("progress-fill");
   const loading = document.getElementById("loading-progress");
-  const play = document.getElementById("play");
+  const errorBox = document.getElementById("error-box");
   const retry = document.getElementById("retry");
   const error = document.getElementById("error-message");
-  const controls = document.getElementById("controls");
   const fullscreen = document.getElementById("unity-fullscreen-btn");
   const warning = document.getElementById("unity-warning");
   const touch = matchMedia("(pointer: coarse)").matches ||
@@ -89,29 +88,37 @@ function startAtisq(loaderUrl, config) {
 
   let engineReady = false;
   let lobbyReady = false;
+  let enteredGame = false;
   let failed = false;
   let startupTimer;
   let warningTimer;
-
   container.toggleAttribute("data-touch", touch);
-  document.getElementById("rotate").hidden = !touch;
   retry.onclick = () => location.reload();
-  play.onclick = () => {
-    overlay.hidden = true;
-    controls.hidden = false;
-    document.getElementById("keyboard-controls").hidden = touch;
-    document.getElementById("touch-controls").hidden = !touch;
+
+  function updateProgress(percent) {
+    if (failed || percent <= progress.value) return;
+    progress.value = percent;
+    progressFill.style.width = percent + "%";
+  }
+
+  function enterGameAutomatically() {
+    if (failed || enteredGame || !engineReady || !lobbyReady) return;
+    enteredGame = true;
+    clearTimeout(startupTimer);
+    loading.classList.remove("is-waiting");
+    updateProgress(100);
+
     fullscreen.hidden = !document.fullscreenEnabled;
     canvas.inert = false;
     canvas.focus({ preventScroll: true });
-  };
 
-  function revealPlay() {
-    if (failed || !engineReady || !lobbyReady) return;
-    clearTimeout(startupTimer);
-    loading.hidden = true;
-    play.hidden = false;
-    play.focus({ preventScroll: true });
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      overlay.hidden = true;
+      return;
+    }
+
+    overlay.classList.add("is-leaving");
+    setTimeout(() => { overlay.hidden = true; }, 260);
   }
 
   function fail(message) {
@@ -119,8 +126,7 @@ function startAtisq(loaderUrl, config) {
     failed = true;
     clearTimeout(startupTimer);
     loading.hidden = true;
-    play.hidden = true;
-    error.hidden = false;
+    if (errorBox) errorBox.hidden = false;
     error.textContent = message;
     retry.hidden = false;
     retry.focus({ preventScroll: true });
@@ -145,15 +151,14 @@ function startAtisq(loaderUrl, config) {
       event.preventDefault();
     }
   });
-  canvas.addEventListener("pointerdown", () => { controls.open = false; });
-  controls.addEventListener("keydown", event => {
-    if (event.key !== "Escape" || !controls.open) return;
-    event.preventDefault();
-    controls.open = false;
-    canvas.focus({ preventScroll: true });
-  });
+  const enterFsIcon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  const exitFsIcon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
   document.addEventListener("fullscreenchange", () => {
-    fullscreen.textContent = document.fullscreenElement ? "Sair da tela cheia" : "Tela cheia";
+    const isFs = Boolean(document.fullscreenElement);
+    const label = isFs ? "Sair da tela cheia" : "Tela cheia";
+    fullscreen.innerHTML = isFs ? exitFsIcon : enterFsIcon;
+    fullscreen.title = label;
+    fullscreen.setAttribute("aria-label", label);
     if (!overlay.hidden || /^(INPUT|TEXTAREA)$/.test(document.activeElement?.tagName)) return;
     canvas.focus({ preventScroll: true });
   });
@@ -168,10 +173,9 @@ function startAtisq(loaderUrl, config) {
   fullscreen.onclick = () => container.dispatchEvent(new Event("atisq:fullscreen"));
   document.addEventListener("atisq:lobby-ready", () => {
     lobbyReady = true;
-    revealPlay();
+    enterGameAutomatically();
   }, { once: true });
 
-  // Keep Retina screens from multiplying the GPU workload by up to nine.
   const renderWidth = Math.max(screen.width, screen.height);
   const renderHeight = touch ? Math.min(screen.width, screen.height) : renderWidth * 9 / 16;
   config.devicePixelRatio = Math.min(
@@ -204,13 +208,12 @@ function startAtisq(loaderUrl, config) {
   script.onload = async () => {
     try {
       await createUnityInstance(canvas, config, value => {
-        const percent = Math.min(100, Math.floor(value * 100));
-        progress.value = percent;
-        status.textContent = percent < 90 ? "Carregando o jogo… " + percent + "%" : "Preparando o lobby…";
+        updateProgress(Math.min(99, Math.round(value * 100)));
       });
       engineReady = true;
-      status.textContent = "Preparando o lobby…";
-      revealPlay();
+      loading.classList.toggle("is-waiting", !lobbyReady && !failed);
+      updateProgress(99);
+      enterGameAutomatically();
     } catch (message) {
       console.error(message);
       fail("Não foi possível iniciar o jogo. Tente de novo em um navegador com WebGL 2.");

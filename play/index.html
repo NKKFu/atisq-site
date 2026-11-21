@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#112b19">
+  <meta name="theme-color" content="#0d191f">
   <title>Atisq</title>
   <link rel="icon" href="TemplateData/logo.png">
   <link rel="stylesheet" href="TemplateData/game.css">
@@ -12,44 +12,26 @@
   <main id="unity-container" aria-label="Atisq">
     <div class="stage">
       <canvas id="unity-canvas" tabindex="0" aria-label="Área do jogo" inert></canvas>
-      <section id="unity-loading-overlay" aria-label="Entrada do jogo">
-        <div class="entry">
-          <img class="island" src="TemplateData/logo.png" alt="" width="256" height="256">
-          <div class="entry-content">
-            <h1>Atisq</h1>
-            <div id="loading-progress">
-              <progress id="unity-progress" max="100" value="0" aria-label="Carregamento"></progress>
-              <p id="unity-loading-status" role="status">Carregando o jogo…</p>
-            </div>
-            <button id="play" class="primary" type="button" hidden>Entrar no jogo</button>
-            <p id="error-message" role="alert" hidden></p>
-            <button id="retry" class="primary" type="button" hidden>Tentar de novo</button>
-            <p id="rotate" hidden>Vire o celular para jogar com mais espaço.</p>
+      <section id="unity-loading-overlay" aria-label="Carregamento do jogo">
+        <div class="error-box" id="error-box" hidden>
+          <p id="error-message" role="alert"></p>
+          <button id="retry" class="primary" type="button">Tentar de novo</button>
+        </div>
+        <div id="loading-progress" class="bottom-loader">
+          <p class="tip-line">Segure o botão de pulo no ar para voar.</p>
+          <div class="progress-track">
+            <progress id="unity-progress" max="100" value="0" aria-label="Carregamento"></progress>
+            <div class="progress-fill" id="progress-fill" aria-hidden="true"></div>
           </div>
         </div>
       </section>
-    </div>
-    <footer class="toolbar">
-      <details id="controls" hidden>
-        <summary>Controles</summary>
-        <dl id="keyboard-controls">
-          <div><dt><kbd>A</kbd> <kbd>D</kbd> ou <kbd>←</kbd> <kbd>→</kbd></dt><dd>Mover</dd></div>
-          <div><dt><kbd>W</kbd>, <kbd>Espaço</kbd> ou <kbd>↑</kbd></dt><dd>Toque para pular, segure para voar</dd></div>
-          <div><dt>Clique esquerdo</dt><dd>Atirar</dd></div>
-          <div><dt>Clique direito, <kbd>F</kbd> ou <kbd>J</kbd></dt><dd>Ataque corpo a corpo</dd></div>
-          <div><dt><kbd>Shift</kbd> ou <kbd>C</kbd></dt><dd>Recarregar</dd></div>
-          <div><dt><kbd>E</kbd> ou <kbd>R</kbd></dt><dd>Especial (varia por personagem)</dd></div>
-        </dl>
-        <dl id="touch-controls" hidden>
-          <div><dt>Analógico esquerdo</dt><dd>Mover</dd></div>
-          <div><dt>Seta à direita</dt><dd>Toque para pular, segure para voar</dd></div>
-          <div><dt>Botões à direita</dt><dd>Atirar, atacar, recarregar e usar especial</dd></div>
-          <div><dt>Ajustes do jogo</dt><dd>Personalizar o HUD</dd></div>
-        </dl>
-      </details>
       <p id="unity-warning" role="status" hidden></p>
-      <button id="unity-fullscreen-btn" type="button" hidden>Tela cheia</button>
-    </footer>
+      <button id="unity-fullscreen-btn" type="button" title="Tela cheia" aria-label="Tela cheia" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+          <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+        </svg>
+      </button>
+    </div>
   </main>
   <script src="TemplateData/game.js"></script>
   <script>
