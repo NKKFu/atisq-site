@@ -154,6 +154,80 @@
 
   <script>
     (function () {
+      // Keep Unity WebGL main loop & multiplayer alive when the browser tab is hidden.
+      (function installBackgroundRafShim() {
+        if (typeof window === "undefined" || typeof Worker === "undefined" || typeof Blob === "undefined") return;
+        var nativeRaf = window.requestAnimationFrame.bind(window);
+        var nativeCancelRaf = window.cancelAnimationFrame.bind(window);
+        var nextId = 1;
+        var pending = new Map();
+        var worker = null;
+
+        try {
+          var workerCode = "var id=null;self.onmessage=function(e){if(e.data==='start'){if(!id)id=setInterval(function(){self.postMessage('tick');},50);}else if(e.data==='stop'){if(id){clearInterval(id);id=null;}}};";
+          worker = new Worker(URL.createObjectURL(new Blob([workerCode], { type: "application/javascript" })));
+        } catch (e) {
+          return;
+        }
+
+        function flushPending() {
+          if (!document.hidden || pending.size === 0) return;
+          var entries = Array.from(pending.entries());
+          pending.clear();
+          var now = performance.now();
+          for (var i = 0; i < entries.length; i++) {
+            try { entries[i][1].cb(now); } catch (err) { console.error(err); }
+          }
+        }
+
+        worker.onmessage = flushPending;
+
+        document.addEventListener("visibilitychange", function () {
+          if (document.hidden) {
+            pending.forEach(function (entry) {
+              if (entry.nativeId !== null) {
+                nativeCancelRaf(entry.nativeId);
+                entry.nativeId = null;
+              }
+            });
+            worker.postMessage("start");
+          } else {
+            worker.postMessage("stop");
+            pending.forEach(function (entry, id) {
+              if (entry.nativeId === null) {
+                entry.nativeId = nativeRaf(function (ts) {
+                  pending.delete(id);
+                  entry.cb(ts);
+                });
+              }
+            });
+          }
+        });
+
+        window.requestAnimationFrame = function (cb) {
+          var id = nextId++;
+          if (document.hidden) {
+            pending.set(id, { cb: cb, nativeId: null });
+            worker.postMessage("start");
+          } else {
+            var entry = { cb: cb, nativeId: null };
+            pending.set(id, entry);
+            entry.nativeId = nativeRaf(function (ts) {
+              pending.delete(id);
+              cb(ts);
+            });
+          }
+          return id;
+        };
+
+        window.cancelAnimationFrame = function (id) {
+          var entry = pending.get(id);
+          if (!entry) return;
+          if (entry.nativeId !== null) nativeCancelRaf(entry.nativeId);
+          pending.delete(id);
+        };
+      })();
+
       var canvas = document.getElementById("unity-canvas");
       var overlay = document.getElementById("unity-loading-overlay");
       var progressBar = document.getElementById("unity-progress-bar");
