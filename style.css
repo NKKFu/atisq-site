@@ -1029,42 +1029,47 @@ button:focus-visible {
 .hell-realm {
   position: absolute;
   inset: auto 0 0 0;
-  height: 760px;
+  height: 980px;
   pointer-events: none;
   overflow: hidden;
   z-index: 0;
   background: linear-gradient(
     180deg,
     var(--soil-deep) 0%,
-    #140d0e 24%,
-    #240b0e 52%,
-    #491210 78%,
-    #8c2412 94%,
-    #c74216 100%
+    #11130e 16%,
+    #140e0e 32%,
+    #210b0e 50%,
+    #3d1010 68%,
+    #701c11 84%,
+    #b53615 95%,
+    #d64c19 100%
   );
 }
 
 .hell-cavern {
   position: absolute;
   inset: auto 0 28px 0;
-  height: 440px;
-  background: url("assets/hell-bg.png") center bottom / auto 432px repeat-x;
+  height: 520px;
+  background: url("assets/hell-bg.png") center bottom / auto 460px repeat-x;
   image-rendering: pixelated;
   filter: blur(1.4px);
   opacity: 0.92;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.18) 22%, rgba(0, 0, 0, 0.72) 56%, #000 88%);
+  mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.18) 22%, rgba(0, 0, 0, 0.72) 56%, #000 88%);
   z-index: 1;
 }
 
 .hell-fade {
   position: absolute;
   inset: 0 0 auto 0;
-  height: 390px;
+  height: 560px;
   background: linear-gradient(
     180deg,
     var(--soil-deep) 0%,
-    var(--soil-deep) 16%,
-    rgba(16, 21, 14, 0.88) 42%,
-    rgba(24, 10, 12, 0.45) 72%,
+    var(--soil-deep) 14%,
+    rgba(16, 21, 14, 0.92) 32%,
+    rgba(20, 14, 14, 0.65) 54%,
+    rgba(30, 10, 12, 0.28) 76%,
     transparent 100%
   );
   z-index: 2;

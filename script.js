@@ -14,49 +14,58 @@ function createCloudSystem(containerId, config) {
 
   const clouds = [];
 
-  function spawnCloud(initial) {
+  function spawnCloud(initial, slotIndex) {
     const rect = container.getBoundingClientRect();
     const areaW = rect.width || config.fallbackWidth;
-    const width = config.minW + Math.random() * (config.maxW - config.minW);
+    const depth = Math.random(); // 0 = far/small/slow/blurry, 1 = closer/larger/faster
+    const jitter = 0.78 + Math.random() * 0.44;
+    const width = Math.max(config.minW, Math.min(config.maxW, (config.minW + depth * (config.maxW - config.minW)) * jitter));
     const y = config.minY + Math.random() * (config.maxY - config.minY);
-    const speed = config.minSpeed + Math.random() * (config.maxSpeed - config.minSpeed);
-    const blur = config.minBlur + Math.random() * (config.maxBlur - config.minBlur);
-    const opacity = config.minOpacity + Math.random() * (config.maxOpacity - config.minOpacity);
-    const x = initial ? Math.random() * (areaW + width) - width : -width - 20 - Math.random() * 60;
+    const speed = (config.minSpeed + depth * (config.maxSpeed - config.minSpeed)) * (0.7 + Math.random() * 0.6);
+    const blur = config.maxBlur - depth * (config.maxBlur - config.minBlur) + Math.random() * 0.5;
+    const opacity = config.minOpacity + depth * (config.maxOpacity - config.minOpacity) * (0.85 + Math.random() * 0.15);
+    const flip = Math.random() < 0.5 ? -1 : 1;
+    let x;
+    if (initial) {
+      const slotW = areaW / config.initialCount;
+      x = slotIndex * slotW + slotW * (0.1 + Math.random() * 0.7) - width * 0.5;
+    } else {
+      x = -width - 50 - Math.random() * 140;
+    }
 
     const img = document.createElement("img");
     img.src = CLOUD_SPRITES[Math.floor(Math.random() * CLOUD_SPRITES.length)];
     img.alt = "";
     img.className = "dyn-cloud";
     img.style.width = `${Math.round(width)}px`;
-    img.style.opacity = opacity.toFixed(2);
-    img.style.filter = `blur(${blur.toFixed(1)}px) brightness(0.95)`;
-    img.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    img.style.opacity = Math.min(0.92, opacity).toFixed(2);
+    img.style.filter = `blur(${blur.toFixed(1)}px) brightness(${(0.92 + Math.random() * 0.1).toFixed(2)})`;
+    img.style.transform = `translate3d(${x}px, ${y}px, 0) scaleX(${flip})`;
     container.appendChild(img);
 
-    clouds.push({ el: img, x, y, width, speed });
+    clouds.push({ el: img, x, y, width, speed, flip });
   }
 
   for (let i = 0; i < config.initialCount; i++) {
-    spawnCloud(true);
+    spawnCloud(true, i);
   }
 
-  let spawnTimer = config.spawnInterval * 0.5;
+  let spawnTimer = config.spawnInterval * (0.4 + Math.random() * 0.8);
 
   return {
     update(dt) {
       const areaW = container.clientWidth || config.fallbackWidth;
       spawnTimer -= dt;
       if (spawnTimer <= 0 && clouds.length < config.maxCount) {
-        spawnCloud(false);
-        spawnTimer = config.spawnInterval * (0.65 + Math.random() * 0.8);
+        spawnCloud(false, 0);
+        spawnTimer = config.spawnInterval * (0.55 + Math.random() * 1.15);
       }
 
       for (let i = clouds.length - 1; i >= 0; i--) {
         const c = clouds[i];
         c.x += c.speed * dt;
-        c.el.style.transform = `translate3d(${c.x.toFixed(1)}px, ${c.y.toFixed(1)}px, 0)`;
-        if (c.x > areaW + 40) {
+        c.el.style.transform = `translate3d(${c.x.toFixed(1)}px, ${c.y.toFixed(1)}px, 0) scaleX(${c.flip})`;
+        if (c.x > areaW + 60) {
           c.el.remove();
           clouds.splice(i, 1);
         }
@@ -68,35 +77,35 @@ function createCloudSystem(containerId, config) {
 const cloudSystems = [
   createCloudSystem("world-clouds", {
     fallbackWidth: 1440,
-    initialCount: 14,
-    maxCount: 20,
-    spawnInterval: 2.6,
-    minW: 96,
-    maxW: 215,
-    minY: 6,
-    maxY: 225,
-    minSpeed: 10,
-    maxSpeed: 26,
-    minBlur: 0.8,
-    maxBlur: 2.2,
-    minOpacity: 0.68,
-    maxOpacity: 0.94
+    initialCount: 5,
+    maxCount: 7,
+    spawnInterval: 8.0,
+    minW: 46,
+    maxW: 132,
+    minY: 12,
+    maxY: 195,
+    minSpeed: 5,
+    maxSpeed: 24,
+    minBlur: 0.6,
+    maxBlur: 2.4,
+    minOpacity: 0.52,
+    maxOpacity: 0.9
   }),
   createCloudSystem("stage-clouds", {
     fallbackWidth: 800,
-    initialCount: 8,
-    maxCount: 12,
-    spawnInterval: 2.8,
-    minW: 76,
-    maxW: 150,
-    minY: 8,
-    maxY: 165,
-    minSpeed: 12,
-    maxSpeed: 26,
-    minBlur: 0.7,
-    maxBlur: 1.8,
-    minOpacity: 0.72,
-    maxOpacity: 0.95
+    initialCount: 3,
+    maxCount: 4,
+    spawnInterval: 9.0,
+    minW: 40,
+    maxW: 102,
+    minY: 10,
+    maxY: 145,
+    minSpeed: 6,
+    maxSpeed: 23,
+    minBlur: 0.5,
+    maxBlur: 2.0,
+    minOpacity: 0.55,
+    maxOpacity: 0.9
   })
 ].filter(Boolean);
 
@@ -348,10 +357,10 @@ function createHellEffects(containerId) {
     container.appendChild(el);
 
     const scale = 0.75 + Math.random() * 0.55;
-    const duration = 5.5 + Math.random() * 3.8;
+    const duration = 12.5 + Math.random() * 7.5;
     const baseX = Math.random() * areaW;
     const dir = Math.random() < 0.5 ? 1 : -1;
-    const maxRise = 360 + Math.random() * 240;
+    const maxRise = 340 + Math.random() * 220;
     const age = initial ? Math.random() * duration : 0;
 
     souls.push({ el, baseX, dir, scale, duration, maxRise, age, phase: Math.random() * 6.28 });
@@ -370,7 +379,7 @@ function createHellEffects(containerId) {
     el.style.color = color;
     container.appendChild(el);
 
-    const duration = 3.2 + Math.random() * 3.4;
+    const duration = 6.2 + Math.random() * 5.2;
     const baseX = Math.random() * areaW;
     const maxRise = 260 + Math.random() * 320;
     const age = initial ? Math.random() * duration : 0;
@@ -398,9 +407,9 @@ function createHellEffects(containerId) {
           s.baseX = Math.random() * areaW;
         }
         const p = s.age / s.duration;
-        const x = s.baseX + s.dir * (38 * p * p) + Math.sin(s.age * 4.5 + s.phase) * 18;
+        const x = s.baseX + s.dir * (30 * p * p) + Math.sin(s.age * 2.1 + s.phase) * 16;
         const y = 18 + p * s.maxRise;
-        const frame = Math.floor(s.age * 7) % 4;
+        const frame = Math.floor(s.age * 5) % 4;
         const alpha = smoothFade(p) * 0.88;
 
         s.el.style.backgroundPosition = `${-frame * SOUL_FRAME_W}px 0px`;
@@ -415,7 +424,7 @@ function createHellEffects(containerId) {
           m.baseX = Math.random() * areaW;
         }
         const p = m.age / m.duration;
-        const x = m.baseX + Math.sin(p * 5 + m.phase) * m.sway;
+        const x = m.baseX + Math.sin(p * 3.5 + m.phase) * m.sway;
         const y = 12 + p * m.maxRise;
         const alpha = smoothFade(p) * 0.85;
 
