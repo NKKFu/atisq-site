@@ -3,62 +3,313 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#252819">
-  <meta name="description" content="Conheça o Atisq, um jogo de ação multiplayer em pixel art.">
-  <title>Atisq — Jogo de ação multiplayer</title>
+  <meta name="theme-color" content="#191411">
+  <meta name="description" content="Atisq — Jogo de ação multiplayer 2D em pixel art com arenas de plataforma e personagens com habilidades únicas.">
+  <meta property="og:title" content="Atisq">
+  <meta property="og:description" content="Jogo de ação multiplayer 2D em pixel art com arenas de plataforma e personagens com habilidades únicas.">
+  <meta property="og:image" content="https://atisq.com/assets/og-image.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Atisq">
+  <meta name="twitter:image" content="https://atisq.com/assets/og-image.png">
+  <title>Atisq</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/og-image.png">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body id="inicio">
+  <!-- Full-bleed sky, blurred mountains & forest layers, dynamic clouds, grass horizon & underground soil -->
   <div class="world" aria-hidden="true">
-    <div class="hills"></div>
-    <img class="cloud cloud-left" src="assets/nuvem.png" alt="">
-    <img class="cloud cloud-right" src="assets/nuvem.png" alt="">
-    <img class="tree tree-left" src="assets/arvore-esquerda.png" alt="">
-    <img class="tree tree-right" src="assets/arvore-direita.png" alt="">
-    <div class="ground"></div>
+    <div class="world-sky" id="world-sky">
+      <div class="world-mountains"></div>
+      <div class="world-clouds" id="world-clouds"></div>
+      <div class="world-forest-back"></div>
+      <div class="world-forest-mid"></div>
+      <div class="world-butterflies" id="world-butterflies"></div>
+    </div>
+    <div class="world-horizon"></div>
+    <div class="world-soil"></div>
   </div>
 
-  <div class="site" id="inicio">
-    <header class="masthead">
-      <a class="brand" href="#inicio" aria-label="Atisq, início">Atisq</a>
-      <nav aria-label="Navegação principal">
-        <a href="#sobre">O jogo</a>
-        <a href="#personagens">Personagens</a>
-      </nav>
-    </header>
+  <!-- Centered portal shell with flanking grass scenery -->
+  <div class="portal-wrap">
+    <!-- Left horizon scenery (outside main stone frame) -->
+    <div class="flank flank-left" aria-hidden="true">
+      <img class="flank-tree-far-left" src="assets/arvore-meio.png" alt="">
+      <img class="flank-tree-left" src="assets/arvore-esquerda.png" alt="">
+      <img class="flank-bush-large-left" src="assets/bush-large.png" alt="">
+      <img class="flank-bush-left" src="assets/bush.png" alt="">
+      <img class="flank-bush-flowers-left" src="assets/bush-flowers.png" alt="">
+      <img class="flank-stump" src="assets/stump.png" alt="">
+      <img class="flank-flowers" src="assets/flowers.png" alt="">
+      <img class="flank-lamp" src="assets/lamp.png" alt="">
+      <div class="chicken-actor flank-chicken-actor" id="chicken-left"></div>
+    </div>
 
-    <main>
-      <section class="stage" aria-labelledby="title">
-        <div class="scene" aria-hidden="true">
-          <img class="scene-cloud" src="assets/nuvem.png" alt="">
-          <img class="scene-tree" src="assets/arvore-direita.png" alt="">
-          <img class="scene-house" src="assets/casa.png" alt="">
-          <div class="scene-floor"></div>
-          <div class="ledge ledge-left"><img src="assets/iris.png" alt=""></div>
-          <div class="ledge ledge-right"><img src="assets/fole.png" alt=""></div>
-        </div>
-        <div class="stage-copy">
-          <p class="genre">Ação multiplayer em pixel art</p>
-          <h1 id="title">ATISQ</h1>
-          <a class="button" href="#sobre">Conheça o jogo</a>
-        </div>
-      </section>
+    <!-- Right horizon scenery (outside right sidebar pillar) -->
+    <div class="flank flank-right" aria-hidden="true">
+      <img class="flank-tree-far-right" src="assets/arvore-meio.png" alt="">
+      <img class="flank-tree-right" src="assets/arvore-direita.png" alt="">
+      <img class="flank-bush-large-right" src="assets/bush-large.png" alt="">
+      <img class="flank-bush-right" src="assets/bush-med.png" alt="">
+      <img class="flank-bush-flowers-right" src="assets/bush-flowers.png" alt="">
+      <img class="flank-flowers-right" src="assets/flowers.png" alt="">
+      <img class="flank-log" src="assets/log.png" alt="">
+      <div class="chicken-actor flank-chicken-actor" id="chicken-right"></div>
+    </div>
 
-      <div class="below">
-        <section class="panel" id="sobre" aria-labelledby="about-title">
-          <h2 id="about-title">O jogo</h2>
-          <p>Em Atisq, você escolhe seu personagem e enfrenta outros jogadores em arenas de plataforma. Combine saltos e habilidades para acertar seus ataques enquanto se esquiva dos adversários.</p>
-        </section>
-        <section class="panel" id="personagens" aria-labelledby="characters-title">
-          <h2 id="characters-title">Personagens</h2>
-          <ul class="characters">
-            <li><img src="assets/iris.png" alt="" loading="lazy"><span>Iris</span></li>
-            <li><img src="assets/fole.png" alt="" loading="lazy"><span>Fole</span></li>
-          </ul>
-        </section>
-      </div>
-    </main>
-    <footer>Atisq</footer>
+    <!-- Main 2-column classic portal grid -->
+    <div class="portal-grid">
+      <!-- LEFT / MAIN COLUMN: Stone-framed stage + dark devlog feed -->
+      <main class="main-col">
+        <div class="stone-frame">
+          <!-- Hero Stage (Atisq Lobby diorama with depth blur) -->
+          <section class="stage" aria-labelledby="hero-title">
+            <div class="stage-bg" aria-hidden="true">
+              <div class="stage-mountains"></div>
+              <div class="stage-clouds" id="stage-clouds"></div>
+              <div class="stage-forest-back"></div>
+              <div class="stage-forest-mid"></div>
+              <div class="stage-butterflies" id="stage-butterflies"></div>
+
+              <img class="stage-house" src="assets/casa.png" alt="">
+              <img class="stage-bush stage-bush-left" src="assets/bush.png" alt="">
+              <img class="stage-flowers" src="assets/flowers.png" alt="">
+              <img class="stage-bench" src="assets/bench.png" alt="">
+              <img class="stage-bush stage-bush-right" src="assets/bush.png" alt="">
+
+              <div class="stage-ledge stage-ledge-left">
+                <img class="stage-sprite sprite-iris" src="assets/iris.png" alt="">
+              </div>
+              <div class="stage-ledge stage-ledge-right">
+                <img class="stage-sprite sprite-fole" src="assets/fole.png" alt="">
+              </div>
+
+              <img class="stage-ground-char sprite-rubi" src="assets/rubi.png" alt="">
+              <div class="chicken-actor stage-chicken-actor" id="chicken-stage-1"></div>
+              <div class="chicken-actor stage-chicken-actor" id="chicken-stage-2"></div>
+              <img class="stage-ground-char sprite-evil" src="assets/evil-gian.png" alt="">
+              <div class="stage-floor"></div>
+            </div>
+
+            <div class="stage-overlay">
+              <h1 id="hero-title" class="sr-only">Atisq</h1>
+              <img class="hero-logo" src="assets/logo.png" alt="Atisq">
+              <p class="hero-tagline">Ação multiplayer 2D em arenas de plataforma</p>
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="https://discord.gg/d4humsHYCa" target="_blank" rel="noopener noreferrer">Entrar no Discord</a>
+                <a class="btn btn-secondary" href="#personagens">Ver Personagens</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- Underground Devlog & Info Feed -->
+          <div class="feed">
+            <!-- Post 1: Latest Update -->
+            <article class="post" id="novidades">
+              <header class="post-head">
+                <div class="post-avatar">
+                  <img src="assets/evil-gian-avatar.png" alt="Evil Gian">
+                </div>
+                <div class="post-meta">
+                  <h2>Atualização: Evil Gian, Arena Demoníaca e Novos Mapas!</h2>
+                  <p class="post-byline"><span class="author">Equipe Atisq</span> — Novidades do Jogo</p>
+                </div>
+              </header>
+              <div class="post-body">
+                <p><em>Saudações, jogadores!</em></p>
+                <p>Acabamos de expandir o universo de <strong>Atisq</strong> com a chegada de <strong>Evil Gian</strong>, trazendo golpes explosivos em área para agitar ainda mais as lutas nas plataformas.</p>
+                <p>Além disso, novas arenas entraram na rotação — incluindo a <strong>Arena Demoníaca</strong>, o mapa da <strong>Cidade</strong> e a <strong>Geleira</strong> — junto com uma reformulação completa de áudio e melhorias de estabilidade no multiplayer.</p>
+              </div>
+            </article>
+
+            <!-- Post 2: Interactive Characters Showcase -->
+            <article class="post" id="personagens">
+              <header class="post-head">
+                <div class="post-avatar post-avatar-sprite">
+                  <img src="assets/iris.png" alt="Íris">
+                </div>
+                <div class="post-meta">
+                  <h2>Personagens em Destaque</h2>
+                  <p class="post-byline"><span class="author">Elenco Atisq</span> — 19 lutadores com habilidades únicas</p>
+                </div>
+              </header>
+              <div class="post-body">
+                <p>Clique em um personagem abaixo para conferir sua habilidade especial e atributos em combate:</p>
+
+                <div class="char-inspector" id="char-inspector" aria-live="polite">
+                  <div class="char-preview-box">
+                    <img id="inspector-img" src="assets/iris.png" alt="Íris">
+                  </div>
+                  <div class="char-details">
+                    <div class="char-details-top">
+                      <h3 id="inspector-name">Íris</h3>
+                      <span class="char-role" id="inspector-role">Portais Dimensionais</span>
+                    </div>
+                    <p id="inspector-desc">Pressione R ou toque no ícone para abrir um portal à frente da Íris. Use o mesmo botão para abrir a saída e surpreender os adversários.</p>
+                    <div class="stat-bars">
+                      <div class="stat-row">
+                        <span>Ataque</span>
+                        <div class="stat-track"><div class="stat-fill stat-atk" id="stat-atk" style="width: 82%"></div></div>
+                        <strong id="val-atk">28</strong>
+                      </div>
+                      <div class="stat-row">
+                        <span>Velocidade</span>
+                        <div class="stat-track"><div class="stat-fill stat-spd" id="stat-spd" style="width: 82%"></div></div>
+                        <strong id="val-spd">9</strong>
+                      </div>
+                      <div class="stat-row">
+                        <span>Vida</span>
+                        <div class="stat-track"><div class="stat-fill stat-hp" id="stat-hp" style="width: 67%"></div></div>
+                        <strong id="val-hp">100</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <ul class="char-grid" role="list">
+                  <li>
+                    <button type="button" class="char-card is-active" data-char="iris">
+                      <img src="assets/iris.png" alt="">
+                      <span>Íris</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="char-card" data-char="fole">
+                      <img src="assets/fole.png" alt="">
+                      <span>Fole</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="char-card" data-char="rubi">
+                      <img src="assets/rubi.png" alt="">
+                      <span>Rubi</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="char-card" data-char="kude">
+                      <img src="assets/kude.png" alt="">
+                      <span>Kude</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="char-card" data-char="raijin">
+                      <img src="assets/raijin.png" alt="">
+                      <span>Raijin</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="char-card" data-char="evil_gian">
+                      <img src="assets/evil-gian.png" alt="">
+                      <span>Evil Gian</span>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </article>
+
+            <!-- Post 3: Arenas -->
+            <article class="post" id="arenas">
+              <header class="post-head">
+                <div class="post-avatar post-avatar-sprite">
+                  <img src="assets/casa.png" alt="Arenas">
+                </div>
+                <div class="post-meta">
+                  <h2>Arenas de Batalha</h2>
+                  <p class="post-byline"><span class="author">Mapas</span> — Cenários de plataforma em pixel art</p>
+                </div>
+              </header>
+              <div class="post-body">
+                <p>Explore o lobby interativo e dispute partidas rápidas em arenas com diferentes layouts, plataformas elevadas e visuais únicos.</p>
+                <div class="arena-grid">
+                  <figure class="arena-card">
+                    <img src="assets/arena-forest.png" alt="Arena Floresta e Lobby">
+                    <figcaption><strong>Floresta &amp; Lobby</strong><span>Ponto de encontro e duelos clássicos</span></figcaption>
+                  </figure>
+                  <figure class="arena-card">
+                    <img src="assets/arena-city.png" alt="Arena Cidade">
+                    <figcaption><strong>Cidade</strong><span>Plataformas urbanas e combate ágil</span></figcaption>
+                  </figure>
+                  <figure class="arena-card">
+                    <img src="assets/arena-snow.png" alt="Arena Geleira">
+                    <figcaption><strong>Geleira</strong><span>Ruínas geladas em alta altitude</span></figcaption>
+                  </figure>
+                </div>
+              </div>
+            </article>
+
+            <!-- Post 4: About -->
+            <article class="post" id="sobre">
+              <header class="post-head">
+                <div class="post-avatar post-avatar-sprite">
+                  <img src="assets/chicken.png" alt="Sobre o Atisq">
+                </div>
+                <div class="post-meta">
+                  <h2>Sobre o Atisq</h2>
+                  <p class="post-byline"><span class="author">O Jogo</span> — Multiplayer 2D</p>
+                </div>
+              </header>
+              <div class="post-body">
+                <p>Em <strong>Atisq</strong>, você escolhe seu personagem e enfrenta outros jogadores em arenas 2D de plataforma. Combine saltos, voo, esquivas e poderes especiais para superar seus adversários em partidas rápidas e competitivas.</p>
+                <p>Quer acompanhar os testes, enviar sugestões ou encontrar outros jogadores? Entre no nosso <a class="inline-link" href="https://discord.gg/d4humsHYCa" target="_blank" rel="noopener noreferrer">servidor oficial no Discord</a>.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <footer class="site-footer">
+          <p>Atisq © 2026 — Todos os direitos reservados.</p>
+        </footer>
+      </main>
+
+      <!-- RIGHT SIDEBAR COLUMN: Iconic Transformice-style mossy grass/earth pillar -->
+      <aside class="sidebar" aria-label="Navegação lateral">
+        <div class="pillar">
+          <div class="pillar-top" aria-hidden="true"></div>
+          <div class="pillar-body">
+            <nav class="side-nav" aria-label="Menu principal">
+              <h2 class="side-heading">Menu</h2>
+              <ul>
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#novidades">Novidades</a></li>
+                <li><a href="#personagens">Personagens</a></li>
+                <li><a href="#arenas">Arenas</a></li>
+                <li><a href="#sobre">Sobre o Jogo</a></li>
+              </ul>
+
+              <h2 class="side-heading">Comunidade</h2>
+              <ul>
+                <li><a href="https://discord.gg/d4humsHYCa" target="_blank" rel="noopener noreferrer">Discord Oficial</a></li>
+              </ul>
+
+              <h2 class="side-heading">Destaques</h2>
+              <ul class="side-stats">
+                <li>19 Personagens</li>
+                <li>Multiplayer Online</li>
+                <li>Pixel Art 2D</li>
+                <li>Arenas Variadas</li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </aside>
+    </div>
   </div>
+
+  <!-- Bottom Abyss: Fade into Hell / Demon Arena with animated souls & embers -->
+  <div class="hell-realm" aria-hidden="true">
+    <div class="hell-fade"></div>
+    <div class="hell-cavern"></div>
+    <div class="hell-lava-glow"></div>
+    <div class="hell-fx" id="hell-fx"></div>
+    <div class="hell-rocks">
+      <img class="hell-rock rock-1" src="assets/hell-rock.png" alt="">
+      <img class="hell-rock rock-2" src="assets/hell-rock.png" alt="">
+      <img class="hell-rock rock-3" src="assets/hell-rock.png" alt="">
+      <img class="hell-rock rock-4" src="assets/hell-rock.png" alt="">
+    </div>
+    <div class="hell-floor"></div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

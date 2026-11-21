@@ -1,252 +1,1239 @@
 :root {
   color-scheme: dark;
-  --soil: #201916;
-  --wood: #30241c;
-  --stone: #81725c;
-  --gold: #ffcb64;
-  --cream: #fff0ca;
-  --cream-muted: #dec9a5;
+  --sky-top: #55f5ff;
+  --sky-mid: #7cf7ff;
+  --sky-low: #b8fbff;
+  --soil-top: #182015;
+  --soil-mid: #141a12;
+  --soil-deep: #10150e;
+  --panel-bg: #171d14;
+  --panel-elev: #20281c;
+  --panel-border: #38452e;
+  --text: #eae4d6;
+  --text-muted: #adb59e;
+  --link: #99adff;
+  --link-hover: #cbd6ff;
+  --gold: #ffcb5c;
+  --gold-deep: #7a4319;
+  --moss: #729c3f;
+  --moss-dark: #2f431b;
+  --horizon-y: 430px;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
+  position: relative;
   margin: 0;
-  color: var(--cream);
-  background: var(--soil);
-  font: 1rem/1.6 Verdana, Geneva, sans-serif;
+  min-height: 100vh;
+  background: var(--soil-deep);
+  color: var(--text);
+  font: 14px/1.6 Verdana, Geneva, Tahoma, sans-serif;
+  overflow-x: hidden;
 }
 
-a { color: inherit; }
-
-a:focus-visible {
-  outline: 3px solid #ffe496;
-  outline-offset: 4px;
+img {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
 }
 
-img { image-rendering: pixelated; }
+a {
+  color: var(--link);
+}
 
+a:hover {
+  color: var(--link-hover);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* =========================================================
+   FULL-BLEED PIXEL WORLD BACKGROUND (SKY -> GRASS -> SOIL)
+   ========================================================= */
 .world {
   position: absolute;
-  inset: 0 0 auto;
-  height: 550px;
+  inset: 0 0 auto 0;
+  height: 980px;
   pointer-events: none;
   overflow: hidden;
-  background: linear-gradient(#4f9cc6, #aad9dd 61%, #3e2a20 62%, var(--soil) 96%);
 }
 
-.hills {
-  position: absolute;
-  inset: 85px 0 auto;
-  height: 265px;
-  background: url("assets/montanhas.png") center bottom / auto 225px repeat-x;
-  image-rendering: pixelated;
-  opacity: .65;
-}
-
-.cloud, .tree { position: absolute; }
-.cloud { width: 200px; }
-.cloud-left { left: 5%; top: 48px; }
-.cloud-right { right: 4%; top: 86px; }
-.tree-left { width: clamp(100px, 18vw, 260px); bottom: 204px; left: -10px; }
-.tree-right { width: clamp(140px, 20vw, 300px); bottom: 205px; right: -34px; }
-
-.ground {
-  position: absolute;
-  inset: 61% 0 auto;
-  height: 59px;
-  background: url("assets/plataforma.png") left top / auto 40px repeat-x;
-  image-rendering: pixelated;
-}
-
-.site {
+.world-sky {
   position: relative;
-  width: min(960px, calc(100% - 32px));
+  height: calc(var(--horizon-y) + 20px);
+  background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 58%, var(--sky-low) 100%);
+  overflow: hidden;
+}
+
+.world-clouds,
+.stage-clouds {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.world-butterflies,
+.stage-butterflies {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.butterfly-actor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  background-image: url("assets/butterflies.png");
+  background-size: 144px 24px;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  pointer-events: none;
+  will-change: transform, background-position;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.25));
+}
+
+.dyn-cloud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  will-change: transform;
+  image-rendering: pixelated;
+}
+
+.world-mountains {
+  position: absolute;
+  inset: auto -16px 8px -16px;
+  height: 235px;
+  background: url("assets/montanhas.png") center bottom / auto 220px repeat-x;
+  filter: blur(3.5px) saturate(0.7) brightness(0.88);
+  opacity: 0.65;
+  z-index: 0;
+}
+
+.world-forest-back {
+  position: absolute;
+  inset: auto -16px 4px -16px;
+  height: 220px;
+  background: url("assets/forest-back.png") center bottom / auto 212px repeat-x;
+  filter: blur(2.4px) brightness(0.85);
+  opacity: 0.88;
+  z-index: 2;
+}
+
+.world-forest-mid {
+  position: absolute;
+  inset: auto -16px 2px -16px;
+  height: 196px;
+  background: url("assets/forest-mid.png") center bottom / auto 188px repeat-x;
+  filter: blur(1px) brightness(0.95);
+  opacity: 0.96;
+  z-index: 2;
+}
+
+.world-horizon {
+  position: absolute;
+  top: var(--horizon-y);
+  left: 0;
+  right: 0;
+  height: 38px;
+  background: url("assets/grass-strip.png") left top / auto 38px repeat-x;
+  image-rendering: pixelated;
+  z-index: 3;
+}
+
+.world-soil {
+  position: absolute;
+  top: calc(var(--horizon-y) + 34px);
+  left: 0;
+  right: 0;
+  height: 540px;
+  background:
+    radial-gradient(circle 4px at 14% 16%, rgba(124, 152, 74, 0.25) 0 80%, transparent 100%),
+    radial-gradient(circle 3px at 28% 28%, rgba(124, 152, 74, 0.2) 0 80%, transparent 100%),
+    radial-gradient(circle 4px at 82% 20%, rgba(124, 152, 74, 0.22) 0 80%, transparent 100%),
+    radial-gradient(circle 3px at 74% 38%, rgba(124, 152, 74, 0.18) 0 80%, transparent 100%),
+    linear-gradient(180deg, var(--soil-top) 0%, var(--soil-mid) 40%, var(--soil-deep) 88%);
+  z-index: 2;
+}
+
+/* =========================================================
+   CENTERED PORTAL WRAPPER & FLANKING SCENERY
+   ========================================================= */
+.portal-wrap {
+  position: relative;
+  width: min(1040px, calc(100% - 28px));
   margin: 0 auto;
-  padding-top: clamp(26px, 5vw, 66px);
+  padding: 28px 0 42px;
 }
 
-.masthead {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 20px;
-  background: var(--wood);
-  border: 3px solid #6e5231;
-  border-bottom: 0;
-  box-shadow: 0 -3px #aa8655;
+/* Left & right grass-line scenery anchored right behind the spiky grass blades */
+.flank {
+  position: absolute;
+  top: calc(var(--horizon-y) + 12px);
+  pointer-events: none;
+  z-index: 2;
 }
 
-.brand {
-  color: var(--gold);
-  font: bold 1.8rem Georgia, serif;
-  text-decoration: none;
+.flank-left {
+  right: calc(100% + 4px);
+  width: 340px;
+  height: 0;
 }
 
-nav { display: flex; flex-wrap: wrap; gap: 8px 22px; }
-
-nav a {
-  color: var(--cream);
-  font-size: .875rem;
-  font-weight: bold;
-  text-decoration: none;
+.flank-right {
+  left: calc(100% + 4px);
+  width: 340px;
+  height: 0;
 }
 
-nav a:hover { text-decoration: underline; }
+.flank img {
+  position: absolute;
+  bottom: 0;
+}
 
+.flank-tree-far-left {
+  right: 175px;
+  width: 175px;
+  bottom: -2px;
+  filter: blur(1.2px) brightness(0.92);
+}
+
+.flank-tree-left {
+  right: 78px;
+  width: 185px;
+  bottom: -2px;
+  filter: blur(0.6px);
+}
+
+.flank-bush-large-left {
+  right: 145px;
+  width: 150px;
+  bottom: -2px;
+}
+
+.flank-bush-left {
+  right: 12px;
+  width: 112px;
+  bottom: -2px;
+}
+
+.flank-bush-flowers-left {
+  right: 108px;
+  width: 80px;
+  bottom: -1px;
+}
+
+.flank-stump {
+  right: 268px;
+  width: 28px;
+  bottom: -1px;
+}
+
+.flank-flowers {
+  right: 204px;
+  width: 42px;
+  bottom: -1px;
+}
+
+.flank-lamp {
+  right: 14px;
+  width: 24px;
+  bottom: -1px;
+}
+
+.flank-tree-far-right {
+  left: 168px;
+  width: 175px;
+  bottom: -2px;
+  transform: scaleX(-1);
+  filter: blur(1.2px) brightness(0.92);
+}
+
+.flank-tree-right {
+  left: 72px;
+  width: 196px;
+  bottom: -2px;
+  filter: blur(0.6px);
+}
+
+.flank-bush-large-right {
+  left: 142px;
+  width: 152px;
+  bottom: -2px;
+}
+
+.flank-bush-right {
+  left: 14px;
+  width: 110px;
+  bottom: -2px;
+}
+
+.flank-bush-flowers-right {
+  left: 104px;
+  width: 82px;
+  bottom: -1px;
+}
+
+.flank-flowers-right {
+  left: 238px;
+  width: 40px;
+  bottom: -1px;
+}
+
+.flank-log {
+  left: 28px;
+  width: 70px;
+  bottom: -2px;
+}
+
+/* Animated 4x4 spritesheet lobby chicken actor (32x32 native -> 36x36 display) */
+.chicken-actor {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  background-image: url("assets/chicken-sheet.png");
+  background-size: 144px 144px;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  pointer-events: none;
+  will-change: transform, background-position;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.35));
+}
+
+.flank-chicken-actor {
+  bottom: -4px;
+  left: 0;
+  z-index: 5;
+}
+
+/* =========================================================
+   2-COLUMN PORTAL GRID (MAIN STONE COLUMN + RIGHT PILLAR)
+   ========================================================= */
+.portal-grid {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 206px;
+  gap: 24px;
+  align-items: start;
+}
+
+/* =========================================================
+   STONE-FRAMED MAIN COLUMN
+   ========================================================= */
+.stone-frame {
+  padding: 0;
+  border: 24px solid #2b351e;
+  border-image-source: url("assets/stone-frame-border.png");
+  border-image-slice: 16;
+  border-image-repeat: round;
+  background-color: var(--panel-bg);
+  image-rendering: pixelated;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.65);
+}
+
+/* Main Hero Stage inside Stone Frame (Atisq Lobby depth + blur) */
 .stage {
   position: relative;
-  isolation: isolate;
-  border: 8px ridge var(--stone);
-  min-height: 472px;
+  min-height: 500px;
+  overflow: hidden;
+  border: 2px solid #0e130c;
+  background: linear-gradient(180deg, #55f5ff 0%, #7cf7ff 55%, #b8fbff 100%);
   display: grid;
   place-items: center;
-  overflow: hidden;
-  background: #79bbd1;
-  box-shadow: 0 8px 0 #1a1512;
 }
 
-.scene {
+.stage-bg {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  z-index: -1;
-  background: url("assets/montanhas.png") center bottom / auto 72% repeat-x, linear-gradient(#62adc9, #b6dadd);
-  image-rendering: pixelated;
 }
 
-.scene-cloud, .scene-tree, .scene-house { position: absolute; }
-.scene-cloud { width: 135px; top: 11%; left: 12%; }
-.scene-tree { width: 183px; right: -15px; bottom: 40px; }
-.scene-house { width: 147px; left: -24px; bottom: 42px; }
-
-.scene-floor {
+.stage-mountains {
   position: absolute;
-  inset: auto 0 0;
-  height: 45px;
-  background: url("assets/plataforma.png") left top / auto 45px repeat-x;
+  inset: auto -14px 20px -14px;
+  height: 280px;
+  background: url("assets/montanhas.png") center bottom / auto 240px repeat-x;
+  filter: blur(3.5px) saturate(0.68) brightness(0.88);
+  opacity: 0.65;
+  z-index: 0;
 }
 
-.ledge {
+.stage-forest-back {
   position: absolute;
-  width: 160px;
+  inset: auto -14px 18px -14px;
+  height: 230px;
+  background: url("assets/forest-back.png") center bottom / auto 220px repeat-x;
+  filter: blur(2.2px) brightness(0.84);
+  opacity: 0.88;
+  z-index: 2;
+}
+
+.stage-forest-mid {
+  position: absolute;
+  inset: auto -14px 18px -14px;
+  height: 205px;
+  background: url("assets/forest-mid.png") center bottom / auto 195px repeat-x;
+  filter: blur(0.9px) brightness(0.95);
+  opacity: 0.96;
+  z-index: 2;
+}
+
+/* Crisp foreground props — tucked right behind the spiky grass tips (z-index: 3 < floor z-index: 4) */
+.stage-house {
+  position: absolute;
+  left: 14px;
+  bottom: 26px;
+  width: 146px;
+  z-index: 3;
+}
+
+.stage-bush {
+  position: absolute;
+  bottom: 26px;
+  z-index: 3;
+}
+
+.stage-bush-left {
+  left: 152px;
+  width: 96px;
+}
+
+.stage-bush-right {
+  right: 16px;
+  width: 108px;
+}
+
+.stage-flowers {
+  position: absolute;
+  left: 254px;
+  bottom: 27px;
+  width: 34px;
+  z-index: 3;
+}
+
+.stage-bench {
+  position: absolute;
+  right: 128px;
+  bottom: 26px;
+  width: 58px;
+  z-index: 3;
+}
+
+.stage-floor {
+  position: absolute;
+  inset: auto 0 0 0;
   height: 36px;
+  background: url("assets/grass-strip.png") left top / auto 36px repeat-x, linear-gradient(180deg, transparent 0 42%, #182015 42% 100%);
+  image-rendering: pixelated;
+  z-index: 4;
+}
+
+/* Floating mossy platforms — tucked cleanly in upper left & right corners away from logo */
+.stage-ledge {
+  position: absolute;
+  width: 128px;
+  height: 28px;
   background: url("assets/plataforma.png") center / 100% 100% no-repeat;
+  z-index: 3;
 }
 
-.ledge-left { left: 13%; bottom: 84px; }
-.ledge-right { right: 11%; bottom: 111px; }
-.ledge img { position: absolute; right: 24px; bottom: 31px; height: 85px; }
-.ledge-right img { right: 51px; height: 73px; }
+.stage-ledge-left {
+  left: 34px;
+  top: 136px;
+}
 
-.stage-copy {
+.stage-ledge-right {
+  right: 34px;
+  top: 124px;
+}
+
+.stage-sprite {
+  position: absolute;
+  bottom: 22px;
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.35));
+}
+
+.sprite-iris {
+  left: 38px;
+  height: 64px;
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+.sprite-fole {
+  right: 34px;
+  height: 64px;
+  transform: scaleX(-1);
+  animation: bob-flip 2.7s ease-in-out infinite;
+}
+
+/* Grounded characters — feet planted cleanly on the grass rim */
+.stage-ground-char {
+  position: absolute;
+  bottom: 28px;
+  z-index: 5;
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.4));
+}
+
+.sprite-rubi {
+  left: 196px;
+  height: 58px;
+}
+
+.sprite-evil {
+  right: 204px;
+  height: 64px;
+  transform: scaleX(-1);
+}
+
+.stage-chicken-actor {
+  bottom: 26px;
+  left: 0;
+  z-index: 5;
+}
+
+/* Stage Foreground Copy + Official Pixel Logo — centered in open sky above ground characters */
+.stage-overlay {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  padding: 20px 24px 108px;
   width: 100%;
-  margin: -24px 0 0;
-  padding: 18px 10px 24px;
-  background: radial-gradient(ellipse, #172a25e6 6%, #172a25aa 42%, transparent 73%);
+  background: radial-gradient(ellipse 64% 58% at 50% 42%, rgba(16, 22, 14, 0.62) 0%, rgba(16, 22, 14, 0.22) 56%, transparent 76%);
 }
 
-.genre {
-  margin: 0 0 4px;
-  color: #fff4d9;
-  font: bold .875rem/1.4 Verdana, sans-serif;
-  text-shadow: 0 2px #14241c, 1px 0 #14241c;
+.hero-logo {
+  width: clamp(200px, 34vw, 276px);
+  height: auto;
+  filter: drop-shadow(0 6px 0 rgba(16, 12, 10, 0.55));
+  margin-bottom: 10px;
 }
 
-h1 {
+.hero-tagline {
   margin: 0 0 18px;
-  color: var(--gold);
-  font: 900 clamp(3.8rem, 11vw, 7.5rem)/.93 Georgia, serif;
-  letter-spacing: -.06em;
-  text-shadow: 2px 3px #6f3c1f, 4px 6px #241a12, -2px -1px #4f3520;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff6dc;
+  text-shadow: 0 2px 0 #131c15, 1px 0 0 #131c15, -1px 0 0 #131c15;
 }
 
-.button {
-  display: inline-block;
-  min-height: 44px;
-  padding: 8px 16px;
-  border: 3px solid #643a21;
-  background: #ffcf77;
-  color: #2c1c16;
-  box-shadow: inset 0 2px #ffedab, 0 4px #2c1c16;
-  font-size: .875rem;
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 18px;
+  font-size: 13px;
   font-weight: bold;
+  text-decoration: none;
+  border: 2px solid #23160d;
+  transition: transform 0.1s ease, filter 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.07);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #ffda7a 0%, #eca234 100%);
+  color: #24150c;
+  box-shadow: inset 0 2px 0 #fff1b8, 0 3px 0 #23160d;
+}
+
+.btn-primary:hover {
+  color: #24150c;
+}
+
+.btn-secondary {
+  background: linear-gradient(180deg, #4b692f 0%, #31481d 100%);
+  color: #f6f2df;
+  box-shadow: inset 0 2px 0 #769f4b, 0 3px 0 #18230e;
+}
+
+.btn-secondary:hover {
+  color: #ffffff;
+}
+
+/* Notice Bar directly under stage (Transformice cookie/notice strip tribute) */
+.notice-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding: 10px 16px;
+  background: #100d0b;
+  border-inline: 2px solid #120f0d;
+  border-bottom: 2px solid #2b231d;
+  font-size: 12.5px;
+  color: #d8cebf;
+}
+
+.notice-bar p {
+  margin: 0;
+}
+
+.notice-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.mini-btn {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 3px;
+  color: #fff;
+}
+
+.mini-btn-green {
+  background: #2f8b2f;
+  border: 1px solid #49b249;
+}
+
+.mini-btn-green:hover {
+  color: #fff;
+  background: #389f38;
+}
+
+.mini-btn-blue {
+  background: #2758bd;
+  border: 1px solid #4d7ee6;
+}
+
+.mini-btn-blue:hover {
+  color: #fff;
+  background: #3368d4;
+}
+
+/* =========================================================
+   DEVLOG / PORTAL FEED (INSIDE STONE FRAME)
+   ========================================================= */
+.feed {
+  background: var(--panel-bg);
+  border: 2px solid #120f0d;
+  border-top: 0;
+  padding: 8px 22px 26px;
+}
+
+.post {
+  padding: 20px 0 22px;
+  border-bottom: 1px solid #2e2620;
+}
+
+.post:last-child {
+  border-bottom: 0;
+  padding-bottom: 6px;
+}
+
+.post-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #2f2822;
+  margin-bottom: 14px;
+}
+
+.post-avatar {
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  background: #120f0d;
+  border: 2px solid #594b3d;
+  box-shadow: inset 0 0 0 2px #261f1a;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.post-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-avatar-sprite img {
+  width: auto;
+  height: 52px;
+  object-fit: contain;
+}
+
+.post-meta h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  line-height: 1.25;
+  color: #9ba7ff;
+  font-weight: bold;
+}
+
+.post-byline {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.post-byline .author {
+  color: #63c7b2;
+  font-weight: bold;
+}
+
+.post-body p {
+  margin: 0 0 11px;
+  color: #d6cab8;
+}
+
+.post-body p:last-child {
+  margin-bottom: 0;
+}
+
+.inline-link {
+  color: var(--gold);
+  font-weight: bold;
+}
+
+.inline-link:hover {
+  color: #ffe299;
+}
+
+/* =========================================================
+   INTERACTIVE CHARACTER INSPECTOR & GRID
+   ========================================================= */
+.char-inspector {
+  display: grid;
+  grid-template-columns: 124px minmax(0, 1fr);
+  gap: 16px;
+  padding: 14px;
+  margin: 14px 0;
+  background: var(--panel-elev);
+  border: 2px solid var(--panel-border);
+}
+
+.char-preview-box {
+  height: 132px;
+  background:
+    radial-gradient(circle at 50% 62%, rgba(114, 156, 63, 0.22), transparent 68%),
+    #14100d;
+  border: 1px solid #4a3d31;
+  display: grid;
+  place-items: center;
+}
+
+.char-preview-box img {
+  height: 92px;
+  width: auto;
+  max-width: 96px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.45));
+}
+
+.char-details-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 12px;
+  margin-bottom: 6px;
+}
+
+.char-details h3 {
+  margin: 0;
+  font-size: 17px;
+  color: var(--gold);
+}
+
+.char-role {
+  font-size: 11.5px;
+  padding: 2px 8px;
+  background: #2f3b22;
+  border: 1px solid #566e3a;
+  color: #d7eeaf;
+  font-weight: bold;
+}
+
+.char-details p {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #d8ccba;
+}
+
+.stat-bars {
+  display: grid;
+  gap: 6px;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 78px 1fr 32px;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.stat-row strong {
+  text-align: right;
+  color: #f3e8d5;
+}
+
+.stat-track {
+  height: 10px;
+  background: #120e0c;
+  border: 1px solid #3f342a;
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  transition: width 0.25s ease;
+}
+
+.stat-atk { background: linear-gradient(90deg, #c74f2c, #f29d38); }
+.stat-spd { background: linear-gradient(90deg, #2d87b8, #63d4ec); }
+.stat-hp  { background: linear-gradient(90deg, #4b8d32, #8fd14f); }
+
+.char-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.char-card {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 10px 6px 8px;
+  background: #15110e;
+  border: 2px solid #3c3128;
+  color: #d9cebe;
+  font: bold 12px/1.2 Verdana, sans-serif;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease, transform 0.1s ease;
+}
+
+.char-card img {
+  height: 52px;
+  width: auto;
+  max-width: 54px;
+  object-fit: contain;
+}
+
+.char-card:hover {
+  border-color: #7c6750;
+  background: #221b16;
+  transform: translateY(-2px);
+}
+
+.char-card.is-active {
+  border-color: var(--gold);
+  background: #2b221a;
+  color: var(--gold);
+  box-shadow: inset 0 0 0 1px rgba(255, 203, 92, 0.35);
+}
+
+/* =========================================================
+   ARENA CARDS
+   ========================================================= */
+.arena-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.arena-card {
+  margin: 0;
+  background: #14100d;
+  border: 2px solid #3f342a;
+  overflow: hidden;
+}
+
+.arena-card img {
+  width: 100%;
+  height: 112px;
+  object-fit: cover;
+  border-bottom: 2px solid #2b231d;
+}
+
+.arena-card figcaption {
+  padding: 8px 10px 10px;
+  display: grid;
+  gap: 2px;
+}
+
+.arena-card strong {
+  font-size: 13px;
+  color: var(--gold);
+}
+
+.arena-card span {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   RIGHT SIDEBAR — ICONIC MOSSY EARTH PILLAR (TRANSFORMICE STYLE)
+   ========================================================= */
+.sidebar {
+  position: relative;
+}
+
+.pillar {
+  position: relative;
+  border-left: 7px solid var(--moss);
+  border-right: 7px solid var(--moss);
+  border-bottom: 6px solid #293617;
+  background:
+    radial-gradient(circle 4px at 26% 12%, rgba(124, 152, 74, 0.24) 0 80%, transparent 100%),
+    radial-gradient(circle 3px at 74% 24%, rgba(124, 152, 74, 0.2) 0 80%, transparent 100%),
+    radial-gradient(circle 4px at 34% 40%, rgba(124, 152, 74, 0.22) 0 80%, transparent 100%),
+    radial-gradient(circle 3px at 68% 56%, rgba(124, 152, 74, 0.18) 0 80%, transparent 100%),
+    linear-gradient(180deg, #1d2618 0%, #161d13 46%, #11160f 100%);
+  box-shadow:
+    inset 4px 0 0 #3f5822,
+    inset -4px 0 0 #3f5822,
+    0 12px 28px rgba(0, 0, 0, 0.55);
+}
+
+.pillar-top {
+  height: 26px;
+  background: url("assets/grass-strip.png") left top / auto 28px repeat-x;
+  image-rendering: pixelated;
+  margin: 0 -7px;
+}
+
+.pillar-body {
+  padding: 220px 14px 28px;
+  min-height: 760px;
+}
+
+.side-heading {
+  margin: 22px 0 10px;
+  font-size: 13.5px;
+  text-align: center;
+  color: #e4d5be;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 5px;
+}
+
+.side-heading:first-child {
+  margin-top: 4px;
+}
+
+.side-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 4px;
+  display: grid;
+  gap: 8px;
+}
+
+.side-nav li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+}
+
+.side-nav li::before {
+  content: "";
+  flex: 0 0 10px;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle at 35% 35%, #ffe699, #d98218 70%, #5c2d09 100%);
+  border-radius: 50%;
+  box-shadow: 0 1px 0 #000;
+}
+
+.side-nav a {
+  color: #8f9fff;
   text-decoration: none;
 }
 
-.button:hover { background: #ffe19a; }
-
-.below {
-  display: grid;
-  grid-template-columns: 1.8fr 1fr;
-  gap: 14px;
-  margin-top: 23px;
+.side-nav a:hover {
+  color: #c8d2ff;
+  text-decoration: underline;
 }
 
-.panel {
-  min-width: 0;
-  padding: 17px 20px 20px;
-  border: 3px solid #6e5231;
-  border-left-color: #9a784c;
-  background: #31251e;
+.side-stats li {
+  color: #c6b8a4;
 }
 
-.panel h2 {
-  margin: 0 0 8px;
-  color: var(--gold);
-  font: bold 1.65rem Georgia, serif;
+.side-stats li::before {
+  background: radial-gradient(circle at 35% 35%, #b5e66c, #5c8a29 72%, #263b11 100%);
 }
 
-.panel p { margin: 0; color: var(--cream-muted); }
-
-.characters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 3px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.characters li {
-  flex: 1 0 70px;
-  display: grid;
-  justify-items: center;
-  gap: 7px;
-  padding: 8px 6px 4px;
-  border: 1px solid #6c5139;
-  background: #211a16;
-  font-size: .875rem;
-}
-
-.characters img { width: 40px; height: 50px; object-fit: contain; }
-
-footer {
-  padding: 20px 0 24px;
-  font-size: .875rem;
-  color: var(--cream-muted);
+/* Footer */
+.site-footer {
+  padding: 18px 8px 18px;
   text-align: center;
+  font-size: 12px;
+  color: #c9a799;
+  text-shadow: 0 1px 0 #120606;
 }
 
-@media (max-width: 640px) {
-  .stage { min-height: 410px; }
-  .stage-copy { margin-top: -76px; }
-  .below { grid-template-columns: 1fr; }
-  .scene-house { width: 100px; bottom: 31px; }
-  .scene-tree { width: 120px; bottom: 32px; }
-  .scene-floor { height: 33px; background-size: auto 33px; }
-  .ledge { width: 100px; height: 26px; }
-  .ledge-left { left: 8%; bottom: 65px; }
-  .ledge-right { right: 8%; bottom: 76px; }
-  .ledge img { right: 16px; bottom: 23px; height: 58px; }
-  .ledge-right img { right: 29px; height: 51px; }
+.site-footer p {
+  margin: 0;
 }
 
-@media (max-width: 385px) {
-  .site { width: calc(100% - 20px); }
-  .masthead { padding-inline: 10px; }
-  nav { gap: 8px 12px; }
+/* =========================================================
+   BOTTOM ABYSS: SEAMLESS FADE INTO HELL / DEMON ARENA
+   ========================================================= */
+.hell-realm {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 760px;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    var(--soil-deep) 0%,
+    #140d0e 24%,
+    #240b0e 52%,
+    #491210 78%,
+    #8c2412 94%,
+    #c74216 100%
+  );
+}
+
+.hell-cavern {
+  position: absolute;
+  inset: auto 0 28px 0;
+  height: 440px;
+  background: url("assets/hell-bg.png") center bottom / auto 432px repeat-x;
+  image-rendering: pixelated;
+  filter: blur(1.4px);
+  opacity: 0.92;
+  z-index: 1;
+}
+
+.hell-fade {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 390px;
+  background: linear-gradient(
+    180deg,
+    var(--soil-deep) 0%,
+    var(--soil-deep) 16%,
+    rgba(16, 21, 14, 0.88) 42%,
+    rgba(24, 10, 12, 0.45) 72%,
+    transparent 100%
+  );
+  z-index: 2;
+}
+
+.hell-lava-glow {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 220px;
+  background: radial-gradient(ellipse 85% 70% at 50% 100%, rgba(255, 106, 24, 0.48) 0%, rgba(196, 40, 18, 0.22) 55%, transparent 80%);
+  animation: lava-pulse 4.5s ease-in-out infinite alternate;
+  z-index: 2;
+}
+
+.hell-fx {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.hell-soul {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 56px;
+  height: 56px;
+  background-image: url("assets/hell-souls.png");
+  background-size: 224px 56px;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  pointer-events: none;
+  will-change: transform, opacity, background-position;
+  filter: drop-shadow(0 0 8px rgba(255, 118, 52, 0.55));
+}
+
+.hell-soul.is-ember {
+  filter: hue-rotate(-78deg) saturate(1.45) brightness(1.08) drop-shadow(0 0 8px rgba(255, 110, 36, 0.65));
+}
+
+.hell-mote {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.hell-rocks {
+  position: absolute;
+  inset: auto 0 28px 0;
+  height: 0;
+  z-index: 3;
+}
+
+.hell-rock {
+  position: absolute;
+  bottom: 0;
+  width: 48px;
+}
+
+.rock-1 { left: 4%; width: 56px; }
+.rock-2 { left: 13%; width: 38px; }
+.rock-3 { right: 12%; width: 42px; transform: scaleX(-1); }
+.rock-4 { right: 3%; width: 60px; transform: scaleX(-1); }
+
+.hell-floor {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 36px;
+  background: url("assets/hell-floor.png") left top / 36px 36px repeat-x;
+  image-rendering: pixelated;
+  z-index: 4;
+  box-shadow: 0 -6px 24px rgba(255, 92, 24, 0.35);
+}
+
+@keyframes lava-pulse {
+  from { opacity: 0.72; }
+  to   { opacity: 1; }
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+@keyframes drift {
+  0%   { transform: translateX(0); }
+  50%  { transform: translateX(36px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes drift-soft {
+  from { transform: translateX(-10px); }
+  to   { transform: translateX(14px); }
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+
+@keyframes bob-flip {
+  0%, 100% { transform: scaleX(-1) translateY(0); }
+  50%      { transform: scaleX(-1) translateY(-5px); }
+}
+
+@keyframes hop {
+  0%, 84%, 100% { transform: translateY(0); }
+  92%           { transform: translateY(-5px); }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1240px) {
+  .flank {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .portal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pillar-body {
+    min-height: auto;
+    padding: 18px 14px 22px;
+  }
+
+  .side-nav ul {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
+
+  .char-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .arena-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .stone-frame {
+    border-width: 16px;
+  }
+
+  .stage {
+    min-height: 410px;
+  }
+
+  .stage-ledge,
+  .stage-bench,
+  .stage-ground-char,
+  .stage-ground-chicken {
+    display: none;
+  }
+
+  .feed {
+    padding: 8px 14px 20px;
+  }
+
+  .char-inspector {
+    grid-template-columns: 1fr;
+  }
+
+  .char-preview-box {
+    height: 104px;
+  }
 }
