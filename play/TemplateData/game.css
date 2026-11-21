@@ -1,0 +1,189 @@
+:root {
+  color-scheme: dark;
+  --forest: #112b19;
+  --deep: #091b14;
+  --wood: #264434;
+  --leaf: #dcf289;
+  --light: #edf6dd;
+  --muted: #b4c7ad;
+  font: 16px/1.45 system-ui, sans-serif;
+  background: var(--deep);
+  color: var(--light);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; }
+
+#unity-container {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  background: var(--deep);
+}
+
+.stage {
+  position: relative;
+  container-type: size;
+  min-height: 0;
+}
+
+#unity-canvas {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  display: block;
+  width: 100%;
+  height: 100%;
+  width: min(100%, 177.778cqh);
+  height: min(100%, 56.25cqw);
+  background: var(--forest);
+  touch-action: none;
+  outline: none;
+}
+
+#unity-loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 18px;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 50% 34%, #203e1d 0%, transparent 65%),
+    var(--forest);
+}
+
+#unity-loading-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("forest.png") center bottom / auto max(75%, 210px) repeat-x;
+  filter: grayscale(1);
+  mix-blend-mode: soft-light;
+  image-rendering: pixelated;
+  mask-image: linear-gradient(transparent 28%, #000 50%, #000 78%, transparent);
+  pointer-events: none;
+}
+
+.entry {
+  position: relative;
+  width: min(100%, 320px);
+  text-align: center;
+}
+
+.island {
+  display: block;
+  margin: 0 auto;
+  width: clamp(108px, 43svh, 238px);
+  max-width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  mix-blend-mode: lighten;
+}
+
+h1 {
+  margin: -9px 0 18px;
+  font: 900 clamp(2.25rem, 8vw, 4rem)/1 system-ui, sans-serif;
+  letter-spacing: .12em;
+  text-indent: .12em;
+  text-transform: uppercase;
+  color: var(--leaf);
+  text-shadow: 0 3px #213418, 0 6px #091b14;
+}
+
+progress {
+  display: block;
+  width: min(100%, 240px);
+  height: 10px;
+  margin: 0 auto;
+  accent-color: var(--leaf);
+  border: 0;
+  background: var(--wood);
+}
+progress::-webkit-progress-bar { background: var(--wood); }
+progress::-webkit-progress-value { background: var(--leaf); }
+progress::-moz-progress-bar { background: var(--leaf); }
+
+p { margin: 10px 0 0; color: var(--muted); font-size: .875rem; }
+#error-message { margin: 0 0 12px; color: #ffe3b7; }
+
+button, summary {
+  min-height: 42px;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: .875rem;
+  color: var(--light);
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+button:hover, summary:hover { background: var(--wood); }
+:focus-visible { outline: 2px solid var(--leaf); outline-offset: -2px; }
+.primary {
+  padding-inline: 24px;
+  font-weight: 750;
+  color: var(--deep);
+  background: var(--leaf);
+  box-shadow: 0 3px #47632b;
+}
+.primary:hover { background: #ecffad; }
+.primary:focus-visible { outline-color: var(--deep); }
+
+.toolbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 clamp(6px, 2vw, 22px);
+}
+.toolbar:has(> :not([hidden])) { border-top: 1px solid var(--wood); }
+#unity-fullscreen-btn { margin-left: auto; }
+#unity-warning { margin: 0; }
+
+dl {
+  position: absolute;
+  z-index: 1;
+  max-width: calc(100vw - 24px);
+  bottom: 100%;
+  margin: 0 0 6px;
+  padding: 12px 16px;
+  color: var(--light);
+  background: var(--deep);
+  border: 1px solid var(--wood);
+  box-shadow: 0 4px 0 #0005;
+  font-size: .875rem;
+}
+dl div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  padding: 4px 0;
+}
+dd { margin: 0; color: var(--muted); }
+kbd { padding: 1px 4px; border: 1px solid #597260; box-shadow: 0 1px #597260; }
+
+[data-touch] #unity-canvas { width: 100%; height: 100%; }
+@media (orientation: landscape) {
+  #rotate { display: none; }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+  .entry {
+    width: min(100%, 560px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+  }
+  .island { width: min(52svh, 210px); }
+  .entry-content { width: 100%; }
+  h1 { margin: 0 0 12px; font-size: clamp(1.8rem, 7vw, 3rem); }
+}

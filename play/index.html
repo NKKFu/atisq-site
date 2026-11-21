@@ -1,315 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#112b19">
   <title>Atisq</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #0b0e14;
-      color: #e6edf3;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: none;
-    }
-    #unity-container {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #0b0e14;
-    }
-    #unity-canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-      background: #0b0e14;
-      outline: none;
-    }
-    #unity-loading-overlay {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      background: radial-gradient(circle at center, #161d2b 0%, #0b0e14 75%);
-      z-index: 20;
-      transition: opacity 0.25s ease;
-    }
-    #unity-loading-overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    .game-title {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #f0f6fc;
-    }
-    .progress-track {
-      width: min(340px, 80vw);
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.12);
-      overflow: hidden;
-    }
-    #unity-progress-bar {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, #3b82f6, #22d3ee);
-      transition: width 0.12s ease-out;
-    }
-    #unity-loading-status {
-      font-size: 13px;
-      color: #9da7b3;
-    }
-    #unity-controls-hint {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #7d8590;
-      text-align: center;
-      line-height: 1.5;
-      max-width: 90vw;
-    }
-    #unity-fullscreen-btn {
-      position: fixed;
-      right: 12px;
-      bottom: 12px;
-      z-index: 10;
-      width: 34px;
-      height: 34px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 8px;
-      background: rgba(11, 14, 20, 0.55);
-      color: #e6edf3;
-      font-size: 16px;
-      cursor: pointer;
-      opacity: 0.45;
-      transition: opacity 0.15s ease, background 0.15s ease;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-    #unity-fullscreen-btn:hover {
-      opacity: 1;
-      background: rgba(22, 29, 43, 0.85);
-    }
-    #unity-warning {
-      position: fixed;
-      left: 50%;
-      top: 12px;
-      transform: translateX(-50%);
-      z-index: 30;
-      max-width: min(560px, 92vw);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .warning-banner {
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      background: rgba(185, 28, 28, 0.92);
-      color: #fff;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-    }
-    .warning-banner.warn {
-      background: rgba(180, 83, 9, 0.92);
-    }
-  </style>
+  <link rel="icon" href="TemplateData/logo.png">
+  <link rel="stylesheet" href="TemplateData/game.css">
 </head>
 <body>
-  <div id="unity-container">
-    <canvas id="unity-canvas" tabindex="0"></canvas>
-  </div>
-
-  <div id="unity-loading-overlay">
-    <div class="game-title">Atisq</div>
-    <div class="progress-track">
-      <div id="unity-progress-bar"></div>
+  <main id="unity-container" aria-label="Atisq">
+    <div class="stage">
+      <canvas id="unity-canvas" tabindex="0" aria-label="Área do jogo" inert></canvas>
+      <section id="unity-loading-overlay" aria-label="Entrada do jogo">
+        <div class="entry">
+          <img class="island" src="TemplateData/logo.png" alt="" width="256" height="256">
+          <div class="entry-content">
+            <h1>Atisq</h1>
+            <div id="loading-progress">
+              <progress id="unity-progress" max="100" value="0" aria-label="Carregamento"></progress>
+              <p id="unity-loading-status" role="status">Carregando o jogo…</p>
+            </div>
+            <button id="play" class="primary" type="button" hidden>Entrar no jogo</button>
+            <p id="error-message" role="alert" hidden></p>
+            <button id="retry" class="primary" type="button" hidden>Tentar de novo</button>
+            <p id="rotate" hidden>Vire o celular para jogar com mais espaço.</p>
+          </div>
+        </div>
+      </section>
     </div>
-    <div id="unity-loading-status">Carregando...</div>
-    <div id="unity-controls-hint">
-      A / D: Mover &middot; W / Espaço: Pular / Voar &middot; Clique Esq.: Atirar &middot; Clique Dir. / F: Ataque &middot; Shift: Recarregar &middot; E / R: Especial
-    </div>
-  </div>
-
-  <button id="unity-fullscreen-btn" type="button" title="Tela cheia" aria-label="Tela cheia">&#x26F6;</button>
-  <div id="unity-warning"></div>
-
+    <footer class="toolbar">
+      <details id="controls" hidden>
+        <summary>Controles</summary>
+        <dl id="keyboard-controls">
+          <div><dt><kbd>A</kbd> <kbd>D</kbd> ou <kbd>←</kbd> <kbd>→</kbd></dt><dd>Mover</dd></div>
+          <div><dt><kbd>W</kbd>, <kbd>Espaço</kbd> ou <kbd>↑</kbd></dt><dd>Toque para pular, segure para voar</dd></div>
+          <div><dt>Clique esquerdo</dt><dd>Atirar</dd></div>
+          <div><dt>Clique direito, <kbd>F</kbd> ou <kbd>J</kbd></dt><dd>Ataque corpo a corpo</dd></div>
+          <div><dt><kbd>Shift</kbd> ou <kbd>C</kbd></dt><dd>Recarregar</dd></div>
+          <div><dt><kbd>E</kbd> ou <kbd>R</kbd></dt><dd>Especial (varia por personagem)</dd></div>
+        </dl>
+        <dl id="touch-controls" hidden>
+          <div><dt>Analógico esquerdo</dt><dd>Mover</dd></div>
+          <div><dt>Seta à direita</dt><dd>Toque para pular, segure para voar</dd></div>
+          <div><dt>Botões à direita</dt><dd>Atirar, atacar, recarregar e usar especial</dd></div>
+          <div><dt>Ajustes do jogo</dt><dd>Personalizar o HUD</dd></div>
+        </dl>
+      </details>
+      <p id="unity-warning" role="status" hidden></p>
+      <button id="unity-fullscreen-btn" type="button" hidden>Tela cheia</button>
+    </footer>
+  </main>
+  <script src="TemplateData/game.js"></script>
   <script>
-    (function () {
-      // Keep Unity WebGL main loop & multiplayer alive when the browser tab is hidden.
-      (function installBackgroundRafShim() {
-        if (typeof window === "undefined" || typeof Worker === "undefined" || typeof Blob === "undefined") return;
-        var nativeRaf = window.requestAnimationFrame.bind(window);
-        var nativeCancelRaf = window.cancelAnimationFrame.bind(window);
-        var nextId = 1;
-        var pending = new Map();
-        var worker = null;
-
-        try {
-          var workerCode = "var id=null;self.onmessage=function(e){if(e.data==='start'){if(!id)id=setInterval(function(){self.postMessage('tick');},50);}else if(e.data==='stop'){if(id){clearInterval(id);id=null;}}};";
-          worker = new Worker(URL.createObjectURL(new Blob([workerCode], { type: "application/javascript" })));
-        } catch (e) {
-          return;
-        }
-
-        function flushPending() {
-          if (!document.hidden || pending.size === 0) return;
-          var entries = Array.from(pending.entries());
-          pending.clear();
-          var now = performance.now();
-          for (var i = 0; i < entries.length; i++) {
-            try { entries[i][1].cb(now); } catch (err) { console.error(err); }
-          }
-        }
-
-        worker.onmessage = flushPending;
-
-        document.addEventListener("visibilitychange", function () {
-          if (document.hidden) {
-            pending.forEach(function (entry) {
-              if (entry.nativeId !== null) {
-                nativeCancelRaf(entry.nativeId);
-                entry.nativeId = null;
-              }
-            });
-            worker.postMessage("start");
-          } else {
-            worker.postMessage("stop");
-            pending.forEach(function (entry, id) {
-              if (entry.nativeId === null) {
-                entry.nativeId = nativeRaf(function (ts) {
-                  pending.delete(id);
-                  entry.cb(ts);
-                });
-              }
-            });
-          }
-        });
-
-        window.requestAnimationFrame = function (cb) {
-          var id = nextId++;
-          if (document.hidden) {
-            pending.set(id, { cb: cb, nativeId: null });
-            worker.postMessage("start");
-          } else {
-            var entry = { cb: cb, nativeId: null };
-            pending.set(id, entry);
-            entry.nativeId = nativeRaf(function (ts) {
-              pending.delete(id);
-              cb(ts);
-            });
-          }
-          return id;
-        };
-
-        window.cancelAnimationFrame = function (id) {
-          var entry = pending.get(id);
-          if (!entry) return;
-          if (entry.nativeId !== null) nativeCancelRaf(entry.nativeId);
-          pending.delete(id);
-        };
-      })();
-
-      var canvas = document.getElementById("unity-canvas");
-      var overlay = document.getElementById("unity-loading-overlay");
-      var progressBar = document.getElementById("unity-progress-bar");
-      var statusText = document.getElementById("unity-loading-status");
-      var warningContainer = document.getElementById("unity-warning");
-      var fullscreenBtn = document.getElementById("unity-fullscreen-btn");
-      var controlsHint = document.getElementById("unity-controls-hint");
-
-      var isTouchDevice = (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) ||
-        /Android|iPhone|iPad|iPod|Mobile|Tablet/i.test(navigator.userAgent || "");
-      if (isTouchDevice && controlsHint) {
-        controlsHint.style.display = "none";
-      }
-
-      // Prevent browser scrolling on game keys when canvas has focus.
-      window.addEventListener("keydown", function (e) {
-        var tag = document.activeElement && document.activeElement.tagName;
-        if (tag === "INPUT" || tag === "TEXTAREA") return;
-        if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(e.code) !== -1) {
-          e.preventDefault();
-        }
-      }, { passive: false });
-
-      // Prevent right-click context menu on canvas so RMB can trigger melee attack.
-      canvas.addEventListener("contextmenu", function (e) {
-        e.preventDefault();
-      });
-
-      function showBanner(msg, type) {
-        var div = document.createElement("div");
-        div.className = "warning-banner" + (type === "warning" ? " warn" : "");
-        div.textContent = msg;
-        warningContainer.appendChild(div);
-        if (type !== "error") {
-          setTimeout(function () {
-            if (div.parentNode) div.parentNode.removeChild(div);
-          }, 5000);
-        }
-      }
-
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/WebGL.loader.js";
-      var config = {
-        dataUrl: buildUrl + "/WebGL.data.unityweb",
-        frameworkUrl: buildUrl + "/WebGL.framework.js.unityweb",
-        codeUrl: buildUrl + "/WebGL.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "Senom",
-        productName: "Atisq",
-        productVersion: "v1",
-        showBanner: showBanner,
-        matchWebGLToCanvasSize: true
-      };
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = function () {
-        createUnityInstance(canvas, config, function (progress) {
-          var pct = Math.round(progress * 100);
-          progressBar.style.width = pct + "%";
-          statusText.textContent = "Carregando... " + pct + "%";
-        }).then(function (unityInstance) {
-          overlay.classList.add("hidden");
-          setTimeout(function () {
-            overlay.style.display = "none";
-          }, 300);
-          fullscreenBtn.style.display = "flex";
-          fullscreenBtn.onclick = function () {
-            unityInstance.SetFullscreen(1);
-          };
-          canvas.focus();
-        }).catch(function (message) {
-          statusText.textContent = "Erro ao iniciar o jogo.";
-          showBanner(String(message), "error");
-        });
-      };
-      script.onerror = function () {
-        statusText.textContent = "Falha ao carregar o loader WebGL.";
-        showBanner("Não foi possível carregar " + loaderUrl, "error");
-      };
-      document.body.appendChild(script);
-    })();
+    startAtisq("Build/" + "WebGL.loader.js", {
+      dataUrl: "Build/" + "WebGL.data.unityweb",
+      frameworkUrl: "Build/" + "WebGL.framework.js.unityweb",
+      codeUrl: "Build/" + "WebGL.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Senom",
+      productName: "Atisq",
+      productVersion: "v1"
+    });
   </script>
 </body>
 </html>
