@@ -1147,23 +1147,37 @@ button:focus-visible {
   margin: 0;
 }
 
-.terms-page {
-  width: min(100% - 2rem, 48rem);
-  margin: 2rem auto 3rem;
+.terms-site {
+  --horizon-y: 300px;
 }
 
-.terms-page .terms-logo {
-  width: min(8rem, 40vw);
-  height: auto;
-  margin-bottom: 1rem;
+.terms-page {
+  position: relative;
+  z-index: 4;
+  width: min(100% - 1.5rem, 54rem);
+  margin: 0 auto;
+  padding-top: clamp(1rem, 5vw, 3.5rem);
+}
+
+.terms-page .terms-stage {
+  height: clamp(220px, 38vw, 300px);
+}
+
+.terms-stage .stage-overlay {
+  padding: 8px 12px 26px;
+}
+
+.terms-stage .hero-logo {
+  width: clamp(130px, 37vw, 210px);
+}
+
+.terms-stage .stage-house,
+.terms-stage .stage-bush-left {
+  max-width: 20%;
 }
 
 .terms-document {
-  margin-top: 1rem;
-  padding: clamp(1.25rem, 5vw, 3rem);
-  background: var(--panel-bg);
-  border: 1px solid var(--panel-border);
-  border-top: 4px solid var(--moss);
+  padding: clamp(1rem, 3.5vw, 2rem) 0 0;
 }
 
 .terms-document h1 {
