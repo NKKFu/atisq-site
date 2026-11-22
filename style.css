@@ -1147,6 +1147,60 @@ button:focus-visible {
   margin: 0;
 }
 
+.terms-page {
+  width: min(100% - 2rem, 48rem);
+  margin: 2rem auto 3rem;
+}
+
+.terms-page .terms-logo {
+  width: min(8rem, 40vw);
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.terms-document {
+  margin-top: 1rem;
+  padding: clamp(1.25rem, 5vw, 3rem);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-top: 4px solid var(--moss);
+}
+
+.terms-document h1 {
+  margin: 0;
+  color: var(--gold);
+  font-size: clamp(1.8rem, 6vw, 2.65rem);
+  line-height: 1.2;
+}
+
+.terms-document h2 {
+  margin: 0 0 .5rem;
+  font-size: 1.2rem;
+  line-height: 1.35;
+}
+
+.terms-document p {
+  margin: 0 0 .8rem;
+}
+
+.terms-document .terms-date {
+  margin-top: .65rem;
+  color: var(--text-muted);
+  font-size: .9rem;
+}
+
+.terms-document section {
+  margin-top: 1.6rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--panel-border);
+}
+
+.terms-page a:focus-visible,
+.site-footer a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
 /* =========================================================
    BOTTOM ABYSS: SEAMLESS FADE INTO HELL / DEMON ARENA
    ========================================================= */
