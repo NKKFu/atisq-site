@@ -1160,15 +1160,11 @@ button:focus-visible {
 }
 
 .terms-page .terms-stage {
-  height: clamp(220px, 38vw, 300px);
+  height: clamp(160px, 29vw, 220px);
 }
 
 .terms-stage .stage-overlay {
   padding: 8px 12px 26px;
-}
-
-.terms-stage .hero-logo {
-  width: clamp(130px, 37vw, 210px);
 }
 
 .terms-stage .stage-house,
