@@ -389,6 +389,49 @@ const chickens = [
   createChickenActor("chicken-right", { startX: 55, minX: 18, maxX: 185, speed: 30 })
 ].filter(Boolean);
 
+function createTaigaSquirrel(el) {
+  if (!el) return null;
+
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const route = [
+    { duration: 2.4, from: 0, to: 0, frames: [0, 6], fps: 1, facing: -1 },
+    { duration: 0.39, from: 0, to: -20, frames: [4, 5, 5], fps: 8, facing: -1, hop: 8 },
+    { duration: 1.35, from: -20, to: -76, frames: [5, 4, 5, 5], fps: 10, facing: -1 },
+    { duration: 1.8, from: -76, to: -76, frames: [6, 1, 2, 3, 2, 1], fps: 9, facing: -1 },
+    { duration: 1.05, from: -76, to: -20, frames: [5, 4, 5, 5], fps: 12, facing: 1 },
+    { duration: 0.39, from: -20, to: 0, frames: [4, 5, 5], fps: 8, facing: 1, hop: 8 }
+  ];
+  let phase = 0;
+  let elapsed = 0;
+
+  return {
+    update(dt) {
+      if (reducedMotion.matches) return;
+
+      elapsed += dt;
+      if (elapsed >= route[phase].duration) {
+        elapsed -= route[phase].duration;
+        phase = (phase + 1) % route.length;
+      }
+
+      const { duration, from, to, frames, fps, facing, hop = 0 } = route[phase];
+      const progress = elapsed / duration;
+      const frame = frames[Math.floor(elapsed * fps) % frames.length];
+      const x = Math.round(from + (to - from) * progress);
+      // The running frames have a one-pixel transparent margin under the paws.
+      const groundOffset = frame === 4 || frame === 5 ? 2 : 0;
+      const y = Math.round(groundOffset - hop * 4 * progress * (1 - progress));
+
+      el.style.setProperty("--squirrel-frame", `${-24 * frame}px`);
+      el.style.setProperty("--squirrel-x", `${x}px`);
+      el.style.setProperty("--squirrel-y", `${y}px`);
+      el.style.setProperty("--squirrel-facing", facing);
+    }
+  };
+}
+
+const taigaSquirrel = createTaigaSquirrel(document.getElementById("sign-squirrel"));
+
 /* =========================================================
    HELL REALM: RISING ANIMATED SOULS & EMBER/SPIRIT MOTES
    Inspired by HellSoulEffects.cs (PortalSouls.png 4 frames)
@@ -499,6 +542,7 @@ function tick(now) {
   for (const sys of cloudSystems) sys.update(dt);
   for (const bsys of butterflySystems) bsys.update(dt);
   for (const c of chickens) c.update(dt);
+  taigaSquirrel?.update(dt);
   if (hellFx) hellFx.update(dt);
 
   requestAnimationFrame(tick);

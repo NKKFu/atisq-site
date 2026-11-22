@@ -235,6 +235,24 @@ button:focus-visible {
   font-weight: 400;
 }
 
+.sign-squirrel {
+  position: absolute;
+  right: 29%;
+  bottom: 0;
+  width: 24px;
+  height: 20px;
+  background: url("assets/taiga-squirrel.png") var(--squirrel-frame, 0px) 0 / 168px 20px no-repeat;
+  image-rendering: pixelated;
+  transform: translate(var(--squirrel-x, 0px), var(--squirrel-y, 0px)) scaleX(var(--squirrel-facing, -1));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sign-squirrel {
+    background-position: 0 0;
+    transform: scaleX(-1);
+  }
+}
+
 /* Left & right grass-line scenery anchored right behind the spiky grass blades */
 .flank {
   position: absolute;
