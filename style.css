@@ -759,6 +759,59 @@ button:focus-visible {
   padding-bottom: 8px;
 }
 
+.x-updates {
+  padding-block: clamp(24px, 4vw, 42px);
+}
+
+.x-updates-inner {
+  max-width: 550px;
+  margin-inline: auto;
+}
+
+.x-updates-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 16px;
+  margin-bottom: 14px;
+}
+
+.x-updates-header h2 {
+  margin: 0;
+  color: var(--text);
+  font: 400 clamp(1.5rem, 4vw, 2rem)/1.15 "Fredoka One", Verdana, sans-serif;
+}
+
+.x-updates-header a {
+  font-size: 0.875rem;
+  text-underline-offset: 3px;
+}
+
+.x-updates-posts {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.x-updates-posts > li {
+  min-width: 0;
+}
+
+.x-updates-posts blockquote {
+  margin: 0;
+  padding: 16px;
+  background: var(--panel-elev);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+}
+
+.x-updates-posts blockquote p {
+  margin: 0 0 8px;
+}
+
 .post-head {
   display: flex;
   align-items: center;
