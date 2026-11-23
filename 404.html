@@ -3,91 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#192620">
+  <meta name="theme-color" content="#55f5ff">
   <meta name="robots" content="noindex">
   <title>404 · Página não encontrada | Atisq</title>
+  <base href="/">
   <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="stylesheet" href="/style.css?v=x-updates">
   <style>
-    @font-face {
-      font-family: "Fredoka One";
-      src: url("/assets/FredokaOne-Regular.ttf") format("truetype");
-      font-display: swap;
+    html { overflow-x: hidden; }
+    body { overflow-x: clip; }
+
+    .world {
+      bottom: 0;
+      height: auto;
     }
 
-    :root {
-      color-scheme: dark;
-      --ink: #101a16;
-      --paper: #fff1d2;
-      --muted: #c5d2bf;
-      --gold: #ffcb5c;
-      --violet: #bca5ff;
-      --display: "Fredoka One", "Arial Rounded MT Bold", sans-serif;
+    .error-sign h1 {
+      margin: 0 0 4px;
+      font-size: clamp(1.05rem, 3.5vw, 1.375rem);
+      font-weight: 400;
     }
 
-    *, *::before, *::after { box-sizing: border-box; }
-
-    body {
-      display: grid;
-      place-items: center;
-      min-height: 100vh;
-      min-height: 100svh;
-      margin: 0;
-      padding: clamp(1rem, 5vw, 3rem);
-      background: radial-gradient(ellipse at 50% 0%, #395647, var(--ink) 75%);
-      color: var(--paper);
-      font: 1rem/1.55 Verdana, Geneva, sans-serif;
+    .error-stage {
+      height: clamp(260px, 36vw, 420px);
+      padding: 0 12px clamp(50px, 8vw, 108px);
     }
 
-    main {
-      width: min(100%, 42rem);
-      border: 1px solid #556b54;
-      background: var(--ink);
-      box-shadow: 0 8px 0 #090f0c;
-      text-align: center;
-    }
-
-    .clearing {
-      position: relative;
-      display: grid;
-      justify-items: center;
-      align-content: end;
-      min-height: clamp(14.5rem, 45vw, 20rem);
-      padding: 1rem 1rem 2.25rem;
-      overflow: hidden;
-      background:
-        linear-gradient(180deg, #15262ab3, #1a343060),
-        url("/assets/forest-mid.png") center bottom / auto 64% repeat-x,
-        url("/assets/forest-back.png") center bottom / auto 79% repeat-x,
-        radial-gradient(ellipse at 50% 25%, #8babb0, #425e62);
-      image-rendering: pixelated;
-    }
-
-    .clearing::after {
-      position: absolute;
-      inset: auto 0 0;
-      height: 19px;
-      background: url("/assets/grass-strip.png") left top / auto 19px repeat-x;
-      content: "";
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: .45rem;
-      margin-bottom: .7rem;
-      color: var(--paper);
-      font: 1.25rem/1 var(--display);
-    }
-
-    .brand img { display: block; }
+    .error-iris { right: 12%; }
 
     .error-art {
+      position: relative;
+      z-index: 3;
       display: flex;
       align-items: center;
       gap: .045em;
-      color: var(--paper);
-      font: clamp(4.5rem, 19vw, 9rem)/.95 var(--display);
-      text-shadow: 0 .055em #16231e, 0 .095em #101a16;
+      color: #fff0cf;
+      font: clamp(3.75rem, 15vw, 9rem)/.95 "Fredoka One", Verdana, sans-serif;
+      text-shadow: 0 .033em #26321d, 0 .075em #151c14;
     }
 
     .portal {
@@ -123,97 +75,143 @@
       width: .04em;
       height: .04em;
       background: #ead5ff;
-      box-shadow: 0 0 .04em var(--violet);
+      box-shadow: 0 0 .04em #bca5ff;
     }
 
     .spark:nth-child(1) { top: 25%; left: 38%; }
     .spark:nth-child(2) { top: 47%; right: 25%; }
     .spark:nth-child(3) { bottom: 27%; left: 30%; }
 
-    .iris {
-      position: absolute;
-      bottom: 13px;
-      left: calc(50% + clamp(6.45rem, 25vw, 11.5rem));
-      width: 33px;
-      height: auto;
+    .error-actions { padding: 24px 12px 28px; }
+
+    @media (max-width: 600px) {
+      .error-stage { height: 260px; }
+      .error-stage .error-iris { display: block; right: 14px; }
+      .error-stage .stage-house { width: 95px; }
     }
 
-    .recovery { padding: clamp(1.5rem, 6vw, 2.75rem) 1rem; }
-
-    h1 {
-      margin: 0;
-      font: clamp(1.75rem, 6vw, 2.75rem)/1.1 var(--display);
-    }
-
-    p {
-      max-width: 29rem;
-      margin: .75rem auto 1.4rem;
-      color: var(--muted);
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: .65rem 1.2rem;
-    }
-
-    .actions a {
-      display: inline-grid;
-      place-items: center;
-      min-height: 44px;
-      padding: .4rem .85rem;
-      color: var(--paper);
-      text-underline-offset: .2em;
-    }
-
-    .actions a:hover { color: var(--gold); }
-
-    .actions .play {
-      border: 1px solid #ffdf8c;
-      background: var(--gold);
-      box-shadow: 0 3px 0 #765021;
-      color: #281e12;
-      font: 1.05rem/1.2 var(--display);
-      text-decoration: none;
-    }
-
-    .actions .play:hover { background: #ffdf8c; color: #281e12; }
-    a:focus-visible { outline: 2px solid var(--violet); outline-offset: 4px; }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-    }
-
-    @media (max-width: 360px) {
-      .iris { width: 22px; }
+    @media (prefers-reduced-motion: reduce) {
+      .world-clouds, .stage-clouds, .world-butterflies, .stage-butterflies, .chicken-actor {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <main>
-    <div class="clearing" aria-hidden="true">
-      <div class="brand"><img src="/play/TemplateData/logo.png" alt="" width="35" height="35"> Atisq</div>
-      <div class="error-art">
-        <span>4</span>
-        <span class="portal"><i class="spark"></i><i class="spark"></i><i class="spark"></i></span>
-        <span>4</span>
-      </div>
-      <img class="iris" src="/assets/iris.png" alt="" width="22" height="47">
+  <div class="world" aria-hidden="true">
+    <div class="world-sky" id="world-sky">
+      <div class="world-mountains"></div>
+      <div class="world-clouds" id="world-clouds"></div>
+      <div class="world-forest-back"></div>
+      <div class="world-forest-mid"></div>
+      <div class="world-butterflies" id="world-butterflies"></div>
     </div>
-    <section class="recovery" aria-labelledby="error-title">
-      <h1 id="error-title"><span class="sr-only">404 · </span>Página não encontrada</h1>
-      <p>O portal da Íris levou você a um caminho que não existe.</p>
-      <div class="actions">
-        <a class="play" href="/play/">Jogar no navegador</a>
-        <a href="/">Voltar ao início</a>
+    <div class="world-horizon"></div>
+    <div class="world-soil"></div>
+  </div>
+
+  <div class="portal-wrap">
+    <!-- Left horizon scenery (outside main stone frame) -->
+    <div class="flank flank-left" aria-hidden="true">
+      <img class="flank-tree-far-left" src="assets/arvore-meio.png" alt="">
+      <img class="flank-tree-left" src="assets/arvore-esquerda.png" alt="">
+      <img class="flank-bush-large-left" src="assets/bush-large.png" alt="">
+      <img class="flank-bush-left" src="assets/bush.png" alt="">
+      <img class="flank-bush-flowers-left" src="assets/bush-flowers.png" alt="">
+      <img class="flank-stump" src="assets/stump.png" alt="">
+      <img class="flank-flowers" src="assets/flowers.png" alt="">
+      <img class="flank-lamp" src="assets/lamp.png" alt="">
+      <div class="chicken-actor flank-chicken-actor" id="chicken-left"></div>
+    </div>
+
+    <!-- Right horizon scenery (outside right sidebar pillar) -->
+    <div class="flank flank-right" aria-hidden="true">
+      <img class="flank-tree-far-right" src="assets/arvore-meio.png" alt="">
+      <img class="flank-tree-right" src="assets/arvore-direita.png" alt="">
+      <img class="flank-bush-large-right" src="assets/bush-large.png" alt="">
+      <img class="flank-bush-right" src="assets/bush-med.png" alt="">
+      <img class="flank-bush-flowers-right" src="assets/bush-flowers.png" alt="">
+      <img class="flank-flowers-right" src="assets/flowers.png" alt="">
+      <img class="flank-log" src="assets/log.png" alt="">
+      <div class="chicken-actor flank-chicken-actor" id="chicken-right"></div>
+    </div>
+
+    <header class="development-sign error-sign">
+      <img src="assets/development-sign.png" width="168" height="42" alt="">
+      <div class="development-sign-copy">
+        <h1 id="error-title"><span class="sr-only">404 · </span>Página não encontrada</h1>
+        O portal da Íris levou você a um caminho que não existe.
       </div>
-    </section>
-  </main>
+      <span class="sign-squirrel" id="sign-squirrel" aria-hidden="true"></span>
+    </header>
+
+    <div class="portal-grid">
+      <main class="main-col" aria-labelledby="error-title">
+        <div class="stone-frame">
+          <div class="stage error-stage" aria-hidden="true">
+            <div class="stage-bg" aria-hidden="true">
+              <div class="stage-mountains"></div>
+              <div class="stage-clouds" id="stage-clouds"></div>
+              <div class="stage-forest-back"></div>
+              <div class="stage-forest-mid"></div>
+              <div class="stage-butterflies" id="stage-butterflies"></div>
+
+              <img class="stage-house" src="assets/casa.png" alt="">
+              <img class="stage-bush stage-bush-left" src="assets/bush.png" alt="">
+              <img class="stage-flowers" src="assets/flowers.png" alt="">
+              <img class="stage-bench" src="assets/bench.png" alt="">
+              <img class="stage-bush stage-bush-right" src="assets/bush.png" alt="">
+
+              <img class="stage-ground-char error-iris" src="assets/iris.png" alt="" width="33" height="70">
+              <div class="stage-ledge stage-ledge-right">
+                <img class="stage-sprite sprite-fole" src="assets/fole.png" alt="">
+              </div>
+
+              <img class="stage-ground-char sprite-rubi" src="assets/rubi.png" alt="">
+              <div class="chicken-actor stage-chicken-actor" id="chicken-stage-1"></div>
+              <div class="chicken-actor stage-chicken-actor" id="chicken-stage-2"></div>
+              <img class="stage-ground-char sprite-evil" src="assets/evil-gian.png" alt="">
+              <div class="stage-floor"></div>
+            </div>
+            <div class="error-art">
+              <span>4</span>
+              <span class="portal"><i class="spark"></i><i class="spark"></i><i class="spark"></i></span>
+              <span>4</span>
+            </div>
+          </div>
+          <div class="stone-divider" aria-hidden="true"></div>
+          <div class="feed">
+            <div class="hero-actions error-actions">
+              <a class="btn btn-primary" href="/">Voltar ao início</a>
+              <a class="btn btn-secondary" href="/play/">Jogar no navegador</a>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <aside class="sidebar" aria-label="Navegação lateral">
+        <div class="pillar">
+          <div class="pillar-body">
+            <nav class="side-nav" aria-label="Menu principal">
+              <h2 class="side-heading">Menu</h2>
+              <ul>
+                <li><a href="/">Início</a></li>
+                <li><a href="/#novidades">Novidades</a></li>
+                <li><a href="/#sobre">Sobre o Jogo</a></li>
+                <li><a href="/termos/">Termos de Serviço</a></li>
+                <li><a href="/privacidade/">Política de Privacidade</a></li>
+              </ul>
+
+              <h2 class="side-heading">Comunidade</h2>
+              <ul>
+                <li><a href="https://discord.gg/d4humsHYCa" target="_blank" rel="noopener noreferrer">Discord Oficial</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <script src="/script.js?v=taiga-squirrel"></script>
 </body>
 </html>
