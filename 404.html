@@ -18,22 +18,36 @@
       height: auto;
     }
 
+    .portal-wrap { padding-top: 28px; }
+
+    .error-sign {
+      min-height: 99px;
+      padding-bottom: 14px;
+    }
+
+    .error-sign img {
+      height: 132px;
+      clip-path: inset(0 0 33px);
+    }
+
     .error-sign h1 {
       margin: 0 0 4px;
       font-size: clamp(1.05rem, 3.5vw, 1.375rem);
       font-weight: 400;
     }
 
-    .error-stage {
-      height: clamp(260px, 36vw, 420px);
-      padding: 0 12px clamp(50px, 8vw, 108px);
+    @media (min-width: 961px) {
+      .portal-wrap { padding-top: 144px; }
     }
 
-    .error-iris { right: 12%; }
+    .error-content {
+      display: grid;
+      justify-items: center;
+      gap: clamp(28px, 5vw, 60px);
+      padding: clamp(18px, 2.5vw, 32px) 12px 36px;
+    }
 
     .error-art {
-      position: relative;
-      z-index: 3;
       display: flex;
       align-items: center;
       gap: .045em;
@@ -44,56 +58,58 @@
 
     .portal {
       position: relative;
-      display: grid;
-      place-items: center;
-      width: .59em;
-      height: .86em;
-      filter: drop-shadow(0 0 .11em #c6a5ff) drop-shadow(0 .055em #262037);
+      flex: 0 0 .68em;
+      width: .68em;
+      aspect-ratio: 36 / 56;
+      background: url("/assets/iris-portal.png") center / contain no-repeat;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 0 .07em #397de4);
     }
 
-    .portal::before, .portal::after {
-      grid-area: 1 / 1;
-      width: 100%;
-      height: 100%;
-      clip-path: polygon(28% 0, 72% 0, 72% 8%, 87% 8%, 87% 20%, 100% 20%, 100% 80%, 87% 80%, 87% 92%, 72% 92%, 72% 100%, 28% 100%, 28% 92%, 13% 92%, 13% 80%, 0 80%, 0 20%, 13% 20%, 13% 8%, 28% 8%);
-      content: "";
+    .portal:has(canvas:not([hidden])) { background: none; }
+    .portal canvas { width: 100%; height: 100%; }
+    .portal canvas:not([hidden]) { display: block; }
+
+    .error-content .btn {
+      --button-edge: #ad671e;
+      --button-light: #fff1b8;
+      box-shadow: inset 0 2px var(--button-light), 0 4px var(--button-edge),
+        0 6px 0 #18140d;
+      transition: transform 140ms ease, filter 140ms ease, box-shadow 140ms ease;
     }
 
-    .portal::before {
-      background: linear-gradient(155deg, #fff0ff 8%, #c3aaff 39%, #7659bf 67%, #e0bdff 94%);
+    .error-content .btn-secondary {
+      --button-edge: #263b1b;
+      --button-light: #91b75c;
     }
 
-    .portal::after {
-      width: 77%;
-      height: 82%;
-      background: radial-gradient(ellipse at 52% 25%, #7854aa, #352850 62%, #211a34);
+    @media (hover: hover) {
+      .error-content .btn:hover {
+        transform: translateY(-3px);
+        filter: brightness(1.15);
+        box-shadow: inset 0 2px var(--button-light), 0 7px var(--button-edge),
+          0 9px 0 #18140d, 0 0 14px color-mix(in srgb, var(--button-light) 45%, transparent);
+      }
     }
 
-    .spark {
-      position: absolute;
-      z-index: 1;
-      width: .04em;
-      height: .04em;
-      background: #ead5ff;
-      box-shadow: 0 0 .04em #bca5ff;
+    .error-content .btn:focus-visible {
+      outline: 2px solid #fff1b8;
+      outline-offset: 5px;
+      filter: brightness(1.15);
     }
 
-    .spark:nth-child(1) { top: 25%; left: 38%; }
-    .spark:nth-child(2) { top: 47%; right: 25%; }
-    .spark:nth-child(3) { bottom: 27%; left: 30%; }
-
-    .error-actions { padding: 24px 12px 28px; }
-
-    @media (max-width: 600px) {
-      .error-stage { height: 260px; }
-      .error-stage .error-iris { display: block; right: 14px; }
-      .error-stage .stage-house { width: 95px; }
+    .error-content .btn:active {
+      transform: translateY(3px);
+      box-shadow: inset 0 2px var(--button-light), 0 1px var(--button-edge), 0 3px #18140d;
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .world-clouds, .stage-clouds, .world-butterflies, .stage-butterflies, .chicken-actor {
+      .world-clouds, .world-butterflies, .chicken-actor {
         display: none;
       }
+
+      .error-content .btn { transition: none; }
+      .error-content .btn:is(:hover, :active) { transform: none; }
     }
   </style>
 </head>
@@ -111,7 +127,7 @@
   </div>
 
   <div class="portal-wrap">
-    <!-- Left horizon scenery (outside main stone frame) -->
+    <!-- Left horizon scenery -->
     <div class="flank flank-left" aria-hidden="true">
       <img class="flank-tree-far-left" src="assets/arvore-meio.png" alt="">
       <img class="flank-tree-left" src="assets/arvore-esquerda.png" alt="">
@@ -136,55 +152,25 @@
       <div class="chicken-actor flank-chicken-actor" id="chicken-right"></div>
     </div>
 
-    <header class="development-sign error-sign">
-      <img src="assets/development-sign.png" width="168" height="42" alt="">
-      <div class="development-sign-copy">
-        <h1 id="error-title"><span class="sr-only">404 · </span>Página não encontrada</h1>
-        O portal da Íris levou você a um caminho que não existe.
-      </div>
-      <span class="sign-squirrel" id="sign-squirrel" aria-hidden="true"></span>
-    </header>
-
     <div class="portal-grid">
-      <main class="main-col" aria-labelledby="error-title">
-        <div class="stone-frame">
-          <div class="stage error-stage" aria-hidden="true">
-            <div class="stage-bg" aria-hidden="true">
-              <div class="stage-mountains"></div>
-              <div class="stage-clouds" id="stage-clouds"></div>
-              <div class="stage-forest-back"></div>
-              <div class="stage-forest-mid"></div>
-              <div class="stage-butterflies" id="stage-butterflies"></div>
-
-              <img class="stage-house" src="assets/casa.png" alt="">
-              <img class="stage-bush stage-bush-left" src="assets/bush.png" alt="">
-              <img class="stage-flowers" src="assets/flowers.png" alt="">
-              <img class="stage-bench" src="assets/bench.png" alt="">
-              <img class="stage-bush stage-bush-right" src="assets/bush.png" alt="">
-
-              <img class="stage-ground-char error-iris" src="assets/iris.png" alt="" width="33" height="70">
-              <div class="stage-ledge stage-ledge-right">
-                <img class="stage-sprite sprite-fole" src="assets/fole.png" alt="">
-              </div>
-
-              <img class="stage-ground-char sprite-rubi" src="assets/rubi.png" alt="">
-              <div class="chicken-actor stage-chicken-actor" id="chicken-stage-1"></div>
-              <div class="chicken-actor stage-chicken-actor" id="chicken-stage-2"></div>
-              <img class="stage-ground-char sprite-evil" src="assets/evil-gian.png" alt="">
-              <div class="stage-floor"></div>
-            </div>
-            <div class="error-art">
-              <span>4</span>
-              <span class="portal"><i class="spark"></i><i class="spark"></i><i class="spark"></i></span>
-              <span>4</span>
-            </div>
+      <main aria-labelledby="error-title">
+        <header class="development-sign error-sign">
+          <img src="assets/development-sign-detailed.png" width="672" height="168" alt="">
+          <div class="development-sign-copy">
+            <h1 id="error-title"><span class="sr-only">404 · </span>Página não encontrada</h1>
+            O portal da Íris levou você a um caminho que não existe.
           </div>
-          <div class="stone-divider" aria-hidden="true"></div>
-          <div class="feed">
-            <div class="hero-actions error-actions">
-              <a class="btn btn-primary" href="/">Voltar ao início</a>
-              <a class="btn btn-secondary" href="/play/">Jogar no navegador</a>
-            </div>
+          <span class="sign-squirrel" id="sign-squirrel" aria-hidden="true"></span>
+        </header>
+        <div class="error-content">
+          <div class="error-art" aria-hidden="true">
+            <span>4</span>
+            <span class="portal"><canvas id="iris-portal" width="216" height="336" hidden></canvas></span>
+            <span>4</span>
+          </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/">Voltar ao início</a>
+            <a class="btn btn-secondary" href="/play/">Jogar no navegador</a>
           </div>
         </div>
       </main>
@@ -213,5 +199,6 @@
     </div>
   </div>
   <script src="/script.js?v=taiga-squirrel"></script>
+  <script type="module" src="/404-portal.js"></script>
 </body>
 </html>
