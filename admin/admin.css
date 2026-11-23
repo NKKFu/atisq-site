@@ -1,0 +1,109 @@
+@font-face {
+  font-family: "Fredoka One";
+  src: url("../assets/FredokaOne-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  --soil: #10150e;
+  --stone: #1b2319;
+  --border: #47543d;
+  --ink: #f3eddf;
+  --muted: #bac4af;
+  --gold: #ffcb5c;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--soil);
+  color: var(--ink);
+  font: 1rem/1.55 system-ui, sans-serif;
+}
+
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 76px;
+  padding: .85rem max(1rem, calc((100% - 70rem) / 2));
+  border-bottom: 1px solid var(--border);
+  background: #171e14;
+}
+
+.masthead img { display: block; height: auto; image-rendering: pixelated; }
+.account { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+.account span { color: var(--muted); overflow-wrap: anywhere; }
+main { width: min(70rem, calc(100% - 2rem)); margin: 0 auto; padding: 2rem 0 3rem; }
+h1, h2 { margin: 0; font-family: "Fredoka One", system-ui, sans-serif; font-weight: 400; line-height: 1.15; }
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-size: 1.45rem; }
+p { margin: .65rem 0 0; }
+
+.gate {
+  width: min(100%, 35rem);
+  margin: clamp(1rem, 9vh, 7rem) auto 0;
+  border: 1px solid var(--border);
+  background: var(--stone);
+  box-shadow: 0 6px 0 #080c07;
+}
+
+.landscape {
+  height: clamp(6rem, 19vw, 10rem);
+  border-bottom: 3px solid var(--border);
+  background: url("../assets/forest-mid.png") center bottom / cover no-repeat,
+    #233c33 url("../assets/forest-back.png") center 56% / cover no-repeat;
+  image-rendering: pixelated;
+}
+
+.gate-content { padding: clamp(1.25rem, 5vw, 2.2rem); }
+.gate-content p, .muted { color: var(--muted); }
+.gate-content button { margin-top: 1.5rem; }
+#auth-status:empty, #promo-status:empty, #list-status:empty { display: none; }
+
+button, input, select {
+  min-height: 2.7rem;
+  border: 1px solid var(--border);
+  border-radius: .3rem;
+  padding: .46rem .75rem;
+  color: var(--ink);
+  font: inherit;
+}
+
+button { background: #293326; font-weight: 650; cursor: pointer; }
+button:hover:not(:disabled) { border-color: var(--gold); }
+button:disabled { opacity: .55; cursor: default; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.primary { background: var(--gold); color: #22190c; border-color: var(--gold); }
+.google { background: #f5f6f4; color: #202124; border-color: #c7cdc5; }
+input, select { width: 100%; background: var(--soil); }
+label { display: block; margin-bottom: .32rem; color: var(--muted); }
+
+.metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 1.5rem 0; }
+.metrics div, .surface { border: 1px solid var(--border); background: var(--stone); }
+.metrics div { padding: .85rem clamp(.5rem, 3vw, 1.5rem); border-top: 3px solid #83986b; }
+.metrics span { color: var(--muted); overflow-wrap: anywhere; }
+.metrics strong { display: block; font-family: "Fredoka One", system-ui, sans-serif; color: var(--gold); font-size: clamp(1.3rem, 5vw, 2.25rem); font-weight: 400; }
+.surface { padding: clamp(1rem, 3vw, 1.5rem); margin-bottom: 1rem; }
+.promotion { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 1rem; }
+#promo-status { grid-column: 1 / -1; margin: 0; }
+.actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+
+.filters { display: grid; grid-template-columns: minmax(10rem, 1fr) minmax(0, 2fr) auto; gap: .65rem; align-items: end; margin: 1rem 0; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th, td { padding: .65rem .55rem; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+th { color: var(--muted); font-size: .9rem; }
+td:first-child { font-weight: 650; }
+.pagination { display: flex; align-items: center; justify-content: flex-end; gap: .7rem; margin-top: 1rem; }
+
+@media (max-width: 38rem) {
+  .promotion { grid-template-columns: 1fr; }
+  .filters { grid-template-columns: 1fr auto; }
+  .filters div:first-child { grid-column: 1 / -1; }
+  .pagination { justify-content: space-between; }
+}

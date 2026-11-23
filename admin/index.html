@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self'; font-src 'self'; connect-src https://toxwdkuiwrrvkgwlkflg.supabase.co; base-uri 'none'; form-action 'none'">
+  <title>Administração · Atisq</title>
+  <link rel="icon" href="../assets/favicon.png">
+  <link rel="stylesheet" href="./admin.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js" integrity="sha384-A97u3Qnt9GZHURO9YJZRe7VQgGUeFzcv6I1oIGnUTxQrCxnpQMwR0/G8F2zt9abZ" crossorigin="anonymous"></script>
+  <script defer src="./config.js"></script>
+  <script defer src="./admin.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <img src="../assets/logo.png" alt="Atisq" width="106">
+    <div class="account" id="account" hidden>
+      <span id="email"></span>
+      <button id="sign-out" type="button">Sair</button>
+    </div>
+  </header>
+  <main>
+    <section class="gate" id="gate" aria-labelledby="title">
+      <div class="landscape" aria-hidden="true"></div>
+      <div class="gate-content">
+        <h1 id="title">Administração do Atisq</h1>
+        <p>Entre com a conta Google autorizada para acessar o painel.</p>
+        <button class="google" id="sign-in" type="button" disabled>Entrar com Google</button>
+        <button id="change-account" type="button" hidden>Trocar de conta</button>
+        <noscript><p>Ative o JavaScript para acessar o painel.</p></noscript>
+        <p id="auth-status" role="status">Verificando a sessão…</p>
+      </div>
+    </section>
+
+    <section id="panel" hidden aria-labelledby="panel-title">
+      <h1 id="panel-title" tabindex="-1">Administração do Atisq</h1>
+      <div class="metrics" aria-label="Resumo do jogo">
+        <div><span>Jogadores</span><strong id="stat-players"></strong></div>
+        <div><span>Clãs</span><strong id="stat-clans"></strong></div>
+        <div><span>Personagens</span><strong id="stat-characters"></strong></div>
+      </div>
+
+      <section class="surface promotion" aria-labelledby="promo-title">
+        <div>
+          <h2 id="promo-title">Personagens grátis</h2>
+          <p id="promo-state"></p>
+        </div>
+        <form id="promo-form">
+          <label for="promo-date">Término da promoção (hora local)</label>
+          <input id="promo-date" type="datetime-local" required>
+          <div class="actions">
+            <button type="submit" class="primary" id="save-promo">Salvar término</button>
+            <button type="button" id="end-promo">Encerrar agora</button>
+          </div>
+        </form>
+        <p id="promo-status" role="status"></p>
+      </section>
+
+      <section class="surface listing" aria-labelledby="list-title">
+        <h2 id="list-title">Registros do jogo</h2>
+        <form class="filters" id="filters">
+          <div>
+            <label for="section">Categoria</label>
+            <select id="section">
+              <option value="players">Jogadores</option>
+              <option value="clans">Clãs</option>
+              <option value="catalogue">Catálogo</option>
+            </select>
+          </div>
+          <div>
+            <label for="query">Buscar por nome</label>
+            <input id="query" type="search" maxlength="80" autocomplete="off">
+          </div>
+          <button type="submit">Buscar</button>
+        </form>
+        <p class="muted" id="list-status" role="status"></p>
+        <div class="table-wrap">
+          <table id="listing-table" hidden aria-label="Resultados da busca"><thead></thead><tbody></tbody></table>
+        </div>
+        <div class="pagination" id="pagination" hidden>
+          <button id="previous" type="button">Anterior</button>
+          <span id="page"></span>
+          <button id="next" type="button">Próxima</button>
+        </div>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
