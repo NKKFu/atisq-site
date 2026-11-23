@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#192620">
+  <meta name="robots" content="noindex">
+  <title>404 · Página não encontrada | Atisq</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <style>
+    @font-face {
+      font-family: "Fredoka One";
+      src: url("/assets/FredokaOne-Regular.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    :root {
+      color-scheme: dark;
+      --ink: #101a16;
+      --paper: #fff1d2;
+      --muted: #c5d2bf;
+      --gold: #ffcb5c;
+      --violet: #bca5ff;
+      --display: "Fredoka One", "Arial Rounded MT Bold", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      min-height: 100svh;
+      margin: 0;
+      padding: clamp(1rem, 5vw, 3rem);
+      background: radial-gradient(ellipse at 50% 0%, #395647, var(--ink) 75%);
+      color: var(--paper);
+      font: 1rem/1.55 Verdana, Geneva, sans-serif;
+    }
+
+    main {
+      width: min(100%, 42rem);
+      border: 1px solid #556b54;
+      background: var(--ink);
+      box-shadow: 0 8px 0 #090f0c;
+      text-align: center;
+    }
+
+    .clearing {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      align-content: end;
+      min-height: clamp(14.5rem, 45vw, 20rem);
+      padding: 1rem 1rem 2.25rem;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, #15262ab3, #1a343060),
+        url("/assets/forest-mid.png") center bottom / auto 64% repeat-x,
+        url("/assets/forest-back.png") center bottom / auto 79% repeat-x,
+        radial-gradient(ellipse at 50% 25%, #8babb0, #425e62);
+      image-rendering: pixelated;
+    }
+
+    .clearing::after {
+      position: absolute;
+      inset: auto 0 0;
+      height: 19px;
+      background: url("/assets/grass-strip.png") left top / auto 19px repeat-x;
+      content: "";
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      margin-bottom: .7rem;
+      color: var(--paper);
+      font: 1.25rem/1 var(--display);
+    }
+
+    .brand img { display: block; }
+
+    .error-art {
+      display: flex;
+      align-items: center;
+      gap: .045em;
+      color: var(--paper);
+      font: clamp(4.5rem, 19vw, 9rem)/.95 var(--display);
+      text-shadow: 0 .055em #16231e, 0 .095em #101a16;
+    }
+
+    .portal {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: .59em;
+      height: .86em;
+      filter: drop-shadow(0 0 .11em #c6a5ff) drop-shadow(0 .055em #262037);
+    }
+
+    .portal::before, .portal::after {
+      grid-area: 1 / 1;
+      width: 100%;
+      height: 100%;
+      clip-path: polygon(28% 0, 72% 0, 72% 8%, 87% 8%, 87% 20%, 100% 20%, 100% 80%, 87% 80%, 87% 92%, 72% 92%, 72% 100%, 28% 100%, 28% 92%, 13% 92%, 13% 80%, 0 80%, 0 20%, 13% 20%, 13% 8%, 28% 8%);
+      content: "";
+    }
+
+    .portal::before {
+      background: linear-gradient(155deg, #fff0ff 8%, #c3aaff 39%, #7659bf 67%, #e0bdff 94%);
+    }
+
+    .portal::after {
+      width: 77%;
+      height: 82%;
+      background: radial-gradient(ellipse at 52% 25%, #7854aa, #352850 62%, #211a34);
+    }
+
+    .spark {
+      position: absolute;
+      z-index: 1;
+      width: .04em;
+      height: .04em;
+      background: #ead5ff;
+      box-shadow: 0 0 .04em var(--violet);
+    }
+
+    .spark:nth-child(1) { top: 25%; left: 38%; }
+    .spark:nth-child(2) { top: 47%; right: 25%; }
+    .spark:nth-child(3) { bottom: 27%; left: 30%; }
+
+    .iris {
+      position: absolute;
+      bottom: 13px;
+      left: calc(50% + clamp(6.45rem, 25vw, 11.5rem));
+      width: 33px;
+      height: auto;
+    }
+
+    .recovery { padding: clamp(1.5rem, 6vw, 2.75rem) 1rem; }
+
+    h1 {
+      margin: 0;
+      font: clamp(1.75rem, 6vw, 2.75rem)/1.1 var(--display);
+    }
+
+    p {
+      max-width: 29rem;
+      margin: .75rem auto 1.4rem;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .65rem 1.2rem;
+    }
+
+    .actions a {
+      display: inline-grid;
+      place-items: center;
+      min-height: 44px;
+      padding: .4rem .85rem;
+      color: var(--paper);
+      text-underline-offset: .2em;
+    }
+
+    .actions a:hover { color: var(--gold); }
+
+    .actions .play {
+      border: 1px solid #ffdf8c;
+      background: var(--gold);
+      box-shadow: 0 3px 0 #765021;
+      color: #281e12;
+      font: 1.05rem/1.2 var(--display);
+      text-decoration: none;
+    }
+
+    .actions .play:hover { background: #ffdf8c; color: #281e12; }
+    a:focus-visible { outline: 2px solid var(--violet); outline-offset: 4px; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 360px) {
+      .iris { width: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="clearing" aria-hidden="true">
+      <div class="brand"><img src="/play/TemplateData/logo.png" alt="" width="35" height="35"> Atisq</div>
+      <div class="error-art">
+        <span>4</span>
+        <span class="portal"><i class="spark"></i><i class="spark"></i><i class="spark"></i></span>
+        <span>4</span>
+      </div>
+      <img class="iris" src="/assets/iris.png" alt="" width="22" height="47">
+    </div>
+    <section class="recovery" aria-labelledby="error-title">
+      <h1 id="error-title"><span class="sr-only">404 · </span>Página não encontrada</h1>
+      <p>O portal da Íris levou você a um caminho que não existe.</p>
+      <div class="actions">
+        <a class="play" href="/play/">Jogar no navegador</a>
+        <a href="/">Voltar ao início</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
