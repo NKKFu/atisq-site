@@ -445,23 +445,21 @@ function createHellEffects(containerId) {
   const motes = [];
 
   function spawnSoul(initial) {
-    const areaW = container.clientWidth || 1440;
     const el = document.createElement("div");
     el.className = "hell-soul" + (Math.random() < 0.62 ? " is-ember" : "");
     container.appendChild(el);
 
     const scale = 0.75 + Math.random() * 0.55;
     const duration = 12.5 + Math.random() * 7.5;
-    const baseX = Math.random() * areaW;
+    const originX = Math.random();
     const dir = Math.random() < 0.5 ? 1 : -1;
-    const maxRise = 340 + Math.random() * 220;
+    const rise = 0.6 + Math.random() * 0.37;
     const age = initial ? Math.random() * duration : 0;
 
-    souls.push({ el, baseX, dir, scale, duration, maxRise, age, phase: Math.random() * 6.28 });
+    souls.push({ el, originX, dir, scale, duration, rise, age, phase: Math.random() * 6.28 });
   }
 
   function spawnMote(initial) {
-    const areaW = container.clientWidth || 1440;
     const el = document.createElement("div");
     el.className = "hell-mote";
     const size = Math.random() < 0.2 ? 6 : (Math.random() < 0.55 ? 4 : 3);
@@ -474,11 +472,11 @@ function createHellEffects(containerId) {
     container.appendChild(el);
 
     const duration = 6.2 + Math.random() * 5.2;
-    const baseX = Math.random() * areaW;
-    const maxRise = 260 + Math.random() * 320;
+    const originX = Math.random();
+    const rise = 0.45 + Math.random() * 0.55;
     const age = initial ? Math.random() * duration : 0;
 
-    motes.push({ el, baseX, duration, maxRise, age, phase: Math.random() * 6.28, sway: 16 + Math.random() * 28 });
+    motes.push({ el, originX, duration, rise, age, phase: Math.random() * 6.28, sway: 16 + Math.random() * 28 });
   }
 
   for (let i = 0; i < 10; i++) spawnSoul(true);
@@ -492,17 +490,18 @@ function createHellEffects(containerId) {
 
   return {
     update(dt) {
-      const areaW = container.clientWidth || 1440;
+      const areaW = container.clientWidth;
+      const riseHeight = Math.max(0, container.clientHeight - SOUL_FRAME_W - 18);
 
       for (const s of souls) {
         s.age += dt;
         if (s.age >= s.duration) {
           s.age = 0;
-          s.baseX = Math.random() * areaW;
+          s.originX = Math.random();
         }
         const p = s.age / s.duration;
-        const x = s.baseX + s.dir * (30 * p * p) + Math.sin(s.age * 2.1 + s.phase) * 16;
-        const y = 18 + p * s.maxRise;
+        const x = s.originX * areaW + s.dir * (30 * p * p) + Math.sin(s.age * 2.1 + s.phase) * 16;
+        const y = 18 + p * s.rise * riseHeight;
         const frame = Math.floor(s.age * 5) % 4;
         const alpha = smoothFade(p) * 0.88;
 
@@ -515,11 +514,11 @@ function createHellEffects(containerId) {
         m.age += dt;
         if (m.age >= m.duration) {
           m.age = 0;
-          m.baseX = Math.random() * areaW;
+          m.originX = Math.random();
         }
         const p = m.age / m.duration;
-        const x = m.baseX + Math.sin(p * 3.5 + m.phase) * m.sway;
-        const y = 12 + p * m.maxRise;
+        const x = m.originX * areaW + Math.sin(p * 3.5 + m.phase) * m.sway;
+        const y = 12 + p * m.rise * riseHeight;
         const alpha = smoothFade(p) * 0.85;
 
         m.el.style.opacity = alpha.toFixed(3);

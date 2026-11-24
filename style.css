@@ -24,6 +24,8 @@
   --moss: #729c3f;
   --moss-dark: #2f431b;
   --horizon-y: 538px;
+  --horizon-height: 38px;
+  --world-height: 1120px;
 }
 
 * {
@@ -79,7 +81,7 @@ button:focus-visible {
 .world {
   position: absolute;
   inset: 0 0 auto 0;
-  height: 1120px;
+  height: var(--world-height);
   pointer-events: none;
   overflow: hidden;
 }
@@ -168,8 +170,8 @@ button:focus-visible {
   top: var(--horizon-y);
   left: 0;
   right: 0;
-  height: 38px;
-  background: url("assets/grass-strip.png") left top / auto 38px repeat-x;
+  height: var(--horizon-height);
+  background: url("assets/grass-strip.png") left top / auto var(--horizon-height) repeat-x;
   image-rendering: pixelated;
   z-index: 3;
 }
@@ -759,59 +761,6 @@ button:focus-visible {
   padding-bottom: 8px;
 }
 
-.x-updates {
-  padding-block: clamp(24px, 4vw, 42px);
-}
-
-.x-updates-inner {
-  max-width: 550px;
-  margin-inline: auto;
-}
-
-.x-updates-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 6px 16px;
-  margin-bottom: 14px;
-}
-
-.x-updates-header h2 {
-  margin: 0;
-  color: var(--text);
-  font: 400 clamp(1.5rem, 4vw, 2rem)/1.15 "Fredoka One", Verdana, sans-serif;
-}
-
-.x-updates-header a {
-  font-size: 0.875rem;
-  text-underline-offset: 3px;
-}
-
-.x-updates-posts {
-  display: grid;
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.x-updates-posts > li {
-  min-width: 0;
-}
-
-.x-updates-posts blockquote {
-  margin: 0;
-  padding: 16px;
-  background: var(--panel-elev);
-  border: 1px solid var(--panel-border);
-  border-radius: 12px;
-}
-
-.x-updates-posts blockquote p {
-  margin: 0 0 8px;
-}
-
 .post-head {
   display: flex;
   align-items: center;
@@ -845,7 +794,8 @@ button:focus-visible {
   object-fit: contain;
 }
 
-.post-meta h2 {
+.post-meta h2,
+.post-meta .x-post-title {
   margin: 0 0 5px;
   font-size: 22px;
   line-height: 1.25;
@@ -871,6 +821,62 @@ button:focus-visible {
 
 .post-body p:last-child {
   margin-bottom: 0;
+}
+
+.x-updates-posts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.x-updates-posts > li + li {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #2f2822;
+}
+
+.x-post-head {
+  gap: clamp(12px, 2vw, 18px);
+}
+
+.x-post-head .post-avatar {
+  flex-basis: 64px;
+  width: 64px;
+  height: 64px;
+}
+
+.x-post-head .post-avatar img {
+  image-rendering: auto;
+}
+
+.x-post-author,
+.x-post-metadata {
+  color: inherit;
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+
+.x-post-author:hover,
+.x-post-metadata:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.x-updates-posts blockquote {
+  margin: 0;
+}
+
+.x-updates-posts blockquote p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.x-post-source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  margin-top: 12px;
 }
 
 .inline-link {
@@ -1327,17 +1333,42 @@ button:focus-visible {
 /* =========================================================
    BOTTOM ABYSS: SEAMLESS FADE INTO HELL / DEMON ARENA
    ========================================================= */
+.home-site {
+  --hell-height: clamp(530px, 65svh, 580px);
+  --hell-tail: clamp(44px, 6svh, 56px);
+  display: flex;
+  flex-direction: column;
+  min-height: max(
+    100vh,
+    var(--world-height),
+    calc(var(--horizon-y) + var(--horizon-height) + var(--hell-height))
+  );
+}
+
+.home-site .world {
+  isolation: isolate;
+}
+
+.home-site .portal-wrap {
+  z-index: 1;
+  /* Show the cavern behind the last posts and footer. */
+  margin-bottom: calc(var(--hell-tail) - var(--hell-height));
+  padding-bottom: 0;
+}
+
 .hell-realm {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 980px;
+  --floor-height: 36px;
+  position: relative;
+  flex: none;
+  margin-top: auto;
+  height: var(--hell-height);
   pointer-events: none;
   overflow: hidden;
   z-index: 0;
   background: linear-gradient(
     180deg,
-    var(--soil-deep) 0%,
-    #11130e 16%,
+    transparent 0%,
+    var(--soil-deep) 16%,
     #140e0e 32%,
     #210b0e 50%,
     #3d1010 68%,
@@ -1349,31 +1380,14 @@ button:focus-visible {
 
 .hell-cavern {
   position: absolute;
-  inset: auto 0 28px 0;
-  height: 520px;
-  background: url("assets/hell-bg.png") center bottom / auto 460px repeat-x;
+  inset: 0 0 calc(var(--floor-height) - 8px);
+  background: url("assets/hell-bg.png") center bottom / auto 100% repeat-x;
   image-rendering: pixelated;
   filter: blur(1.4px);
   opacity: 0.92;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.18) 22%, rgba(0, 0, 0, 0.72) 56%, #000 88%);
-  mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.18) 22%, rgba(0, 0, 0, 0.72) 56%, #000 88%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, transparent 12%, rgba(0, 0, 0, 0.6) 55%, #000 88%);
+  mask-image: linear-gradient(180deg, transparent 0%, transparent 12%, rgba(0, 0, 0, 0.6) 55%, #000 88%);
   z-index: 1;
-}
-
-.hell-fade {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 560px;
-  background: linear-gradient(
-    180deg,
-    var(--soil-deep) 0%,
-    var(--soil-deep) 14%,
-    rgba(16, 21, 14, 0.92) 32%,
-    rgba(20, 14, 14, 0.65) 54%,
-    rgba(30, 10, 12, 0.28) 76%,
-    transparent 100%
-  );
-  z-index: 2;
 }
 
 .hell-lava-glow {
@@ -1387,7 +1401,7 @@ button:focus-visible {
 
 .hell-fx {
   position: absolute;
-  inset: 0;
+  inset: 0 0 calc(var(--floor-height) - 8px);
   overflow: hidden;
   z-index: 3;
 }
@@ -1422,7 +1436,7 @@ button:focus-visible {
 
 .hell-rocks {
   position: absolute;
-  inset: auto 0 28px 0;
+  inset: auto 0 calc(var(--floor-height) - 8px) 0;
   height: 0;
   z-index: 3;
 }
@@ -1441,8 +1455,8 @@ button:focus-visible {
 .hell-floor {
   position: absolute;
   inset: auto 0 0 0;
-  height: 36px;
-  background: url("assets/hell-floor.png") left top / 36px 36px repeat-x;
+  height: var(--floor-height);
+  background: url("assets/hell-floor.png") left top / var(--floor-height) var(--floor-height) repeat-x;
   image-rendering: pixelated;
   z-index: 4;
   box-shadow: 0 -6px 24px rgba(255, 92, 24, 0.35);
@@ -1493,7 +1507,7 @@ button:focus-visible {
 
 @media (max-width: 960px) {
   .portal-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .pillar-body {
