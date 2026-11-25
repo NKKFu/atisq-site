@@ -78,6 +78,7 @@ function startAtisq(loaderUrl, config) {
   const progress = document.getElementById("unity-progress");
   const progressFill = document.getElementById("progress-fill");
   const loading = document.getElementById("loading-progress");
+  const loadingTitle = document.getElementById("loading-title");
   const errorBox = document.getElementById("error-box");
   const retry = document.getElementById("retry");
   const error = document.getElementById("error-message");
@@ -189,7 +190,7 @@ function startAtisq(loaderUrl, config) {
       console.error(message);
       if (!engineReady || !lobbyReady) {
         fail("Não foi possível carregar o jogo. Verifique a conexão e tente de novo.");
-      } else if (overlay.hidden) {
+      } else if (enteredGame) {
         showWarning("O jogo encontrou um erro. Recarregue a página para voltar.", 0);
       } else {
         fail("O jogo encontrou um erro ao iniciar.");
@@ -211,6 +212,7 @@ function startAtisq(loaderUrl, config) {
         updateProgress(Math.min(99, Math.round(value * 100)));
       });
       engineReady = true;
+      if (!lobbyReady && !failed) loadingTitle.textContent = "Preparando a entrada…";
       loading.classList.toggle("is-waiting", !lobbyReady && !failed);
       updateProgress(99);
       enterGameAutomatically();

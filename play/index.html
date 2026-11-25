@@ -13,12 +13,18 @@
     <div class="stage">
       <canvas id="unity-canvas" tabindex="0" aria-label="Área do jogo" inert></canvas>
       <section id="unity-loading-overlay" aria-label="Carregamento do jogo">
+        <div class="loading-brand">
+          <img src="TemplateData/logo.png" width="256" height="256" alt="">
+          <h1>Atisq</h1>
+        </div>
         <div class="error-box" id="error-box" hidden>
           <p id="error-message" role="alert"></p>
           <button id="retry" class="primary" type="button">Tentar de novo</button>
         </div>
         <div id="loading-progress" class="bottom-loader">
-          <p class="tip-line">Segure o botão de pulo no ar para voar.</p>
+          <div class="loading-plaque">
+            <p id="loading-title" role="status">Carregando o jogo…</p>
+          </div>
           <div class="progress-track">
             <progress id="unity-progress" max="100" value="0" aria-label="Carregamento"></progress>
             <div class="progress-fill" id="progress-fill" aria-hidden="true"></div>
